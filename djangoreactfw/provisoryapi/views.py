@@ -1,7 +1,8 @@
-from math import hypot
 from django.shortcuts import render
-from django.http import HttpResponse
+from rest_framework import generics
+from .serializers import VRoomSerializer
+from .models import VideoRoom
 
-# Create your views here.
-def main(request): 
-    return HttpResponse("Hello World!")
+class VRoomView(generics.CreateAPIView):
+    queryset = VideoRoom.objects.all()
+    serializer_class = VRoomSerializer
