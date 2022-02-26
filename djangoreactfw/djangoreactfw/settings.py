@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'provisoryapi.apps.ProvisoryapiConfig',
-    'rest_framework'
+    'rest_framework',
+    'reactfend.apps.ReactfendConfig'
 ]
 
 MIDDLEWARE = [
