@@ -9,3 +9,10 @@ class VRoomSerializer(serializers.ModelSerializer):
             'guest_pause_permission', 
             'created_at'
         )
+
+class CreateVRoomSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VideoRoom
+        fields = (
+            'guest_pause_permission'
+        )        

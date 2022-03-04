@@ -2,7 +2,7 @@ import React from "react";
 
 const App = () => {
   return (
-    <h1>hello WORLD! from func react</h1>
+    <h1>hello WORLD!</h1>
   )
 }
 
