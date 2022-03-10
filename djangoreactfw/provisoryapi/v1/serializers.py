@@ -5,14 +5,27 @@ class VRoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = VideoRoom
         fields = (
-            'uuid', 'owner',
+            'owner',
             'guest_pause_permission', 
             'created_at',
         )
+
+    def to_representation(self, obj):
+        data = super().to_representation(obj)
+        data["owner"] = obj.owner.username
+        return data
+    
 
 class CreateVRoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = VideoRoom
         fields = (
-            'guest_pause_permission',
-        )        
+            'title', 'uuid', 'owner',
+            'guest_pause_permission', 
+            'created_at',
+        )
+
+    def to_representation(self, obj):
+        data = super().to_representation(obj)
+        data["owner"] = obj.owner.username
+        return data
