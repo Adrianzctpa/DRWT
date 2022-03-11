@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model, authenticate
+from django.contrib.auth.hashers import check_password
 
 User = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
@@ -22,10 +23,11 @@ class CreateUserSerializer(serializers.ModelSerializer):
         password = self.validated_data.pop('password')
         user = User(**self.validated_data)
         user.set_password(password)
+        print(password)
         user.save()    
 
 class LoginSerializer(serializers.Serializer):
-    email = serializers.CharField(max_length=255)
+    username = serializers.CharField(max_length=255)
     password = serializers.CharField(
         label= ("Password"),
         style={'input_type': 'password'},
@@ -35,15 +37,16 @@ class LoginSerializer(serializers.Serializer):
     )
 
     def validate(self, data):
-        email = data.get('email')
+        username = data.get('username')
         password = data.get('password')
 
-        if email and password:
+        if username and password:
             user = authenticate(
                 request=self.context.get('request'),
-                email=email, password=password
+                username=username, password=password
                 )
             if not user:
+                #print(check_password(password, User.objects.get(email__exact=email).password))
                 msg = ('LOG IN FAILED')
                 raise serializers.ValidationError(msg, code='Auth error')     
         else: 
