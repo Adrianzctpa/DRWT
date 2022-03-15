@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model, authenticate
-from django.contrib.auth.hashers import check_password
 
 User = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
@@ -23,7 +22,6 @@ class CreateUserSerializer(serializers.ModelSerializer):
         password = self.validated_data.pop('password')
         user = User(**self.validated_data)
         user.set_password(password)
-        print(password)
         user.save()    
 
 class LoginSerializer(serializers.Serializer):
@@ -46,9 +44,8 @@ class LoginSerializer(serializers.Serializer):
                 username=username, password=password
                 )
             if not user:
-                #print(check_password(password, User.objects.get(email__exact=email).password))
                 msg = ('LOG IN FAILED')
-                raise serializers.ValidationError(msg, code='Auth error')     
+                raise serializers.ValidationError(msg, code='Auth error')         
         else: 
             msg = ("FIELDS ARE REQUIRED") 
             raise serializers.ValidationError(msg, code='Auth error')      

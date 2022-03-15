@@ -38,8 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'provisoryapi.apps.ProvisoryapiConfig',
     'rest_framework',
+    'rest_framework_simplejwt.token_blacklist',
+    'provisoryapi.apps.ProvisoryapiConfig',  
     'reactfend.apps.ReactfendConfig',
     'users.apps.UsersConfig',
 ]
