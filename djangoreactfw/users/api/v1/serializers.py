@@ -22,33 +22,4 @@ class CreateUserSerializer(serializers.ModelSerializer):
         password = self.validated_data.pop('password')
         user = User(**self.validated_data)
         user.set_password(password)
-        user.save()    
-
-class LoginSerializer(serializers.Serializer):
-    username = serializers.CharField(max_length=255)
-    password = serializers.CharField(
-        label= ("Password"),
-        style={'input_type': 'password'},
-        trim_whitespace=False,
-        max_length=128,
-        write_only=True
-    )
-
-    def validate(self, data):
-        username = data.get('username')
-        password = data.get('password')
-
-        if username and password:
-            user = authenticate(
-                request=self.context.get('request'),
-                username=username, password=password
-                )
-            if not user:
-                msg = ('LOG IN FAILED')
-                raise serializers.ValidationError(msg, code='Auth error')         
-        else: 
-            msg = ("FIELDS ARE REQUIRED") 
-            raise serializers.ValidationError(msg, code='Auth error')      
-
-        data['user'] = user
-        return data        
+        user.save()  
