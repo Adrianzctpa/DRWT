@@ -1,13 +1,16 @@
 from django.shortcuts import render
 from rest_framework import generics, status
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from .serializers import VRoomSerializer, CreateVRoomSerializer
 from ..models import VideoRoom
 
 class VRoomView(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = VideoRoom.objects.all()
     serializer_class = VRoomSerializer
 
 class CreateVRoomView(generics.CreateAPIView):
+    permission_classes = [AllowAny]
     queryset = VideoRoom.objects.all() 
     serializer_class = CreateVRoomSerializer
     

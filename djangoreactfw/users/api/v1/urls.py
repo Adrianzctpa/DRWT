@@ -1,8 +1,10 @@
 from django.urls import path
-from .views import UserView, CreateUserView, BlacklistView
+from rest_framework import routers
+from .views import UserViewSet, CreateUserView
+
+router = routers.SimpleRouter()
+router.register(r"users", UserViewSet, basename='users-vs')
 
 urlpatterns = [
-   path('users', UserView.as_view()),
    path('createusers', CreateUserView.as_view()),
-   path('token/blacklist', BlacklistView.as_view()),
-]
+] + router.urls
