@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import UserSerializer, CreateUserSerializer
+from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -21,6 +22,13 @@ class UserViewSet(viewsets.ModelViewSet):
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        queryset = self.get_queryset()
+        user = get_object_or_404(queryset, pk=pk)
+        serializer = self.get_serializer(user)
+        return Response(serializer.data)
+
         
 class CreateUserView(generics.CreateAPIView):
     permission_classes = [AllowAny]
