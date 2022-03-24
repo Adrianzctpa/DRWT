@@ -8,7 +8,7 @@ class VideoRoom(models.Model):
     uuid = models.UUIDField(unique=True, default=uuid4, editable=False, db_index=True)
     owner = models.ForeignKey(User, related_name='videorooms', on_delete=models.CASCADE)
     guest_pause_permission = models.BooleanField(null=False,default=False)
-    videopath = models.TextField()
+    videopath = models.TextField(default="Path goes here!")
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

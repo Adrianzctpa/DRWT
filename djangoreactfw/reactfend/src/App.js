@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes} from 'react-router-dom'
 import jwt_decode from "jwt-decode"
 import Home from './components/Home.js'
 import Login from "./components/Login.js"
+import VideoPlayer from "./components/VideoPlayer.js"
 
 const App = () => {
   // States
@@ -12,6 +13,7 @@ const App = () => {
     access: "", refresh: ""
   })
   const [uid, setUid] = useState(null)
+  const [vrooms, setVrooms] = useState([])
   //
 
   //basic auth code
@@ -37,10 +39,11 @@ const App = () => {
         "Authorization": `Bearer ${ac}`
       }
     })
-    
     let data = await response.json()
+    
     if (response.status === 200) {
       setUsername(data.username)
+      GetVRooms()
     } else {
       UpdateToken()
     }
@@ -57,19 +60,53 @@ const App = () => {
         refresh: rt
       })
     })
-
     let data = await response.json()
+    
     if (response.status === 200) {
       setTokens({access: data.access, refresh: data.refresh})
       localStorage.setItem('access',  data.access)
       localStorage.setItem('refresh', data.refresh)
       console.log("tokens refreshed!")
       getUsername();
+    
     } else {
       setTokens({access: null, refresh: null})
       localStorage.removeItem("access")
       localStorage.removeItem("refresh")
       console.log("removing..")
+    }
+  }
+  //
+
+  // Get VideoRooms
+  const GetVRooms = async () => {
+    let ac = localStorage.getItem("access")
+    let response = await fetch("/v1/getvroom", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${ac}`
+        }
+    })
+    let data = await response.json()
+    
+    if (response.status === 200) {
+      const arr = []
+      
+      for (var i = 0; i < data.length; i++) {
+        arr.push(
+          new Promise((resolve) => {
+            resolve({
+              vroom: data[i]
+            })
+          })
+        )
+      }
+
+      Promise.all(arr).then((items) => {
+        setVrooms(items)
+      })
+
     }
   }
   //
@@ -82,8 +119,17 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        <Route path='' element={<Home log={logstatus} name={username} />} />
-        <Route path="login" element={<Login log={logstatus} />} /> 
+        {logstatus ? 
+        <>
+          <Route path='' element={<Home log={logstatus} name={username} />} />
+          <Route path="login" element={<Login log={logstatus} />} />
+          <Route path="videoplayer" element={<VideoPlayer ac={tokens.access} vrooms={vrooms} />} />
+        </> : (
+        <>
+          <Route path='' element={<Home log={logstatus} name={username} />} />
+          <Route path="login" element={<Login log={logstatus} />} />
+        </>)
+        }
       </Routes>  
     </Router>
   )

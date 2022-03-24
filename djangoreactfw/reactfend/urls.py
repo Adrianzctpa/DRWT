@@ -3,5 +3,6 @@ from .views import index
 
 urlpatterns = [
     path("", index),
-    path("login", index)
+    path("login", index),
+    path("videoplayer", index)
 ]
