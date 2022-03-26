@@ -4,5 +4,5 @@ from .views import index
 urlpatterns = [
     path("", index),
     path("login", index),
-    path("videoplayer", index)
+    path("selectvroom", index)
 ]

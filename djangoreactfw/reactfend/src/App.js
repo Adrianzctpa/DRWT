@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes} from 'react-router-dom'
 import jwt_decode from "jwt-decode"
 import Home from './components/Home.js'
 import Login from "./components/Login.js"
-import VideoPlayer from "./components/VideoPlayer.js"
+import SelectVRoom, { routes } from "./components/SelectVRoom.js"
 
 const App = () => {
   // States
@@ -123,7 +123,7 @@ const App = () => {
         <>
           <Route path='' element={<Home log={logstatus} name={username} />} />
           <Route path="login" element={<Login log={logstatus} />} />
-          <Route path="videoplayer" element={<VideoPlayer ac={tokens.access} vrooms={vrooms} />} />
+          <Route path="selectvroom" element={<SelectVRoom ac={tokens.access} vrooms={vrooms} />} />
         </> : (
         <>
           <Route path='' element={<Home log={logstatus} name={username} />} />
