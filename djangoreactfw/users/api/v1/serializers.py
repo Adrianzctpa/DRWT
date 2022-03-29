@@ -5,8 +5,8 @@ User = get_user_model()
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('username',)
-        read_only_fields = ("username",)    
+        fields = ('username', 'uuid')
+        read_only_fields = ('uuid',)
 
 class CreateUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -15,7 +15,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
             'uuid', 'username', 'name', 'email', 'password'
         )
         read_only_fields = ("uuid",)
-        write_only_fields = ("password",)      
+        write_only_fields = ("password",)     
 
     def save(self, *args, **kwargs):
         password = self.validated_data.pop('password')

@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom"
+import React, { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom"
 
-var arr = [];
-const SelectVRoom = ({ac, vrooms}) => {
-    
+const SelectVRoom = ({vrooms}) => {
+
+    let navigate = useNavigate();
+
     const GenerateVrooms = () => {
         let RoomsDiv = document.getElementById("RoomsDiv")
         
@@ -11,29 +12,22 @@ const SelectVRoom = ({ac, vrooms}) => {
             let div = document.createElement("div")
             div.classList.add("Room")
             div.onclick = () => {
-                console.log(`you clicked vroom number ${k + 1} `)
+                navigate(`/videoroom/${e.uuid}`)
             }
             
             let title = document.createElement("p")
-            title.textContent = e.vroom.title
+            title.textContent = e.title
 
             let guestpause = document.createElement("h5")
-            guestpause.textContent = "Guest Pause: " + e.vroom.guest_pause_permission
+            guestpause.textContent = "Guest Pause: " + e.guest_pause_permission
 
             let vpath = document.createElement("h5")
-            vpath.textContent = "Video Path: " + e.vroom.videopath
+            vpath.textContent = "Video Path: " + e.videopath
 
             div.appendChild(title)
             div.appendChild(guestpause)
             div.appendChild(vpath)
             RoomsDiv.appendChild(div)
-        })
-    }
-
-    const GenerateRoutes = () => {
-        vrooms.forEach((e,k,a) => {
-            let routes = []
-            //routes.push()
         })
     }
 
@@ -54,5 +48,3 @@ const SelectVRoom = ({ac, vrooms}) => {
 }
 
 export default SelectVRoom;
-
-export const routes = arr;

@@ -1,5 +1,6 @@
-from rest_framework import generics, status, viewsets
-from rest_framework.permissions import BasePermission, IsAuthenticated, AllowAny, SAFE_METHODS
+from rest_framework import generics, status, viewsets, mixins
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from .permissions import AllowIsntAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -9,29 +10,22 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-class ReadOnly(BasePermission):
-    def has_permission(self, request, view):
-        return request.method in SAFE_METHODS
-
-class UserViewSet(viewsets.ModelViewSet):
+class UserViewSet(mixins.ListModelMixin,
+                mixins.UpdateModelMixin,
+                viewsets.GenericViewSet):
     permission_classes = [IsAuthenticated]
-    queryset = User.objects.all()
     serializer_class = UserSerializer 
-    
-    def list(self, request):
-        queryset = self.get_queryset()
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+    lookup_field = "uuid"
 
-    def retrieve(self, request, pk=None):
-        queryset = self.get_queryset()
-        user = get_object_or_404(queryset, pk=pk)
-        serializer = self.get_serializer(user)
-        return Response(serializer.data)
+    def get_queryset(self):
+        action_list = ["partial_update"]
 
+        if self.action in action_list:
+            return User.objects.filter(username=self.request.user, uuid=self.kwargs.get("uuid"))
+        return User.objects.filter(username=self.request.user)
         
 class CreateUserView(generics.CreateAPIView):
-    permission_classes = [AllowAny]
+    permission_classes = [AllowIsntAuthenticated]
     queryset = User.objects.all()
     serializer_class = CreateUserSerializer
 

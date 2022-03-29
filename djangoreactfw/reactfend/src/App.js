@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes} from 'react-router-dom'
-import jwt_decode from "jwt-decode"
 import Home from './components/Home.js'
 import Login from "./components/Login.js"
-import SelectVRoom, { routes } from "./components/SelectVRoom.js"
+import SelectVRoom from "./components/SelectVRoom.js"
+import VideoRoom from "./components/VideoRoom.js"
 
 const App = () => {
   // States
@@ -12,7 +12,6 @@ const App = () => {
   const [tokens, setTokens] = useState({
     access: "", refresh: ""
   })
-  const [uid, setUid] = useState(null)
   const [vrooms, setVrooms] = useState([])
   //
 
@@ -23,16 +22,13 @@ const App = () => {
         access: localStorage.getItem("access"),
         refresh: localStorage.getItem("refresh")
       })
-      setUid(jwt_decode(JSON.stringify(localStorage.getItem("access"))).user_id)
       setLogStatus(true)
     }
   }
 
   const getUsername = async () => {
     let ac = localStorage.getItem("access")
-    let userid = jwt_decode(JSON.stringify(ac)).user_id
-
-    let response = await fetch("/v1/users/" + userid, {
+    let response = await fetch("/v1/users/", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -42,7 +38,7 @@ const App = () => {
     let data = await response.json()
     
     if (response.status === 200) {
-      setUsername(data.username)
+      setUsername(data[0].username)
       GetVRooms()
     } else {
       UpdateToken()
@@ -81,7 +77,7 @@ const App = () => {
   // Get VideoRooms
   const GetVRooms = async () => {
     let ac = localStorage.getItem("access")
-    let response = await fetch("/v1/getvroom", {
+    let response = await fetch("/v1/vroomset", {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -91,22 +87,7 @@ const App = () => {
     let data = await response.json()
     
     if (response.status === 200) {
-      const arr = []
-      
-      for (var i = 0; i < data.length; i++) {
-        arr.push(
-          new Promise((resolve) => {
-            resolve({
-              vroom: data[i]
-            })
-          })
-        )
-      }
-
-      Promise.all(arr).then((items) => {
-        setVrooms(items)
-      })
-
+      setVrooms(data)
     }
   }
   //
@@ -114,16 +95,29 @@ const App = () => {
   useEffect(() => {
     AuthCheck();
     getUsername();
-  }, [])
+  },[])
+
+  const RouteLoop = []
+  vrooms.forEach((e,k,a) => {
+    RouteLoop.push({pathname: `videoroom/${e.uuid}`})
+  })
+
+  const RouteComponents = [];
+  for (var i = 0; i < RouteLoop.length; i++) {
+    RouteComponents.push(
+      <Route path={RouteLoop[i].pathname} element={<VideoRoom  ac={tokens.access} />} />
+    )
+  }
 
   return (
     <Router>
       <Routes>
         {logstatus ? 
         <>
+          { RouteComponents }
           <Route path='' element={<Home log={logstatus} name={username} />} />
           <Route path="login" element={<Login log={logstatus} />} />
-          <Route path="selectvroom" element={<SelectVRoom ac={tokens.access} vrooms={vrooms} />} />
+          <Route path="selectvroom" element={<SelectVRoom vrooms={vrooms} />} />
         </> : (
         <>
           <Route path='' element={<Home log={logstatus} name={username} />} />
