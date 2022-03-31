@@ -64,7 +64,6 @@ const App = () => {
       localStorage.setItem('refresh', data.refresh)
       console.log("tokens refreshed!")
       getUsername();
-    
     } else {
       setTokens({access: null, refresh: null})
       localStorage.removeItem("access")
@@ -92,22 +91,26 @@ const App = () => {
   }
   //
 
-  useEffect(() => {
-    AuthCheck();
-    getUsername();
-  },[])
-
+  //generate vrooms route
   const RouteLoop = []
-  vrooms.forEach((e,k,a) => {
-    RouteLoop.push({pathname: `videoroom/${e.uuid}`})
+  vrooms.forEach((e) => {
+    RouteLoop.push({
+      pathname: `videoroom/${e.uuid}`,
+      info: e})
   })
 
   const RouteComponents = [];
   for (var i = 0; i < RouteLoop.length; i++) {
     RouteComponents.push(
-      <Route path={RouteLoop[i].pathname} element={<VideoRoom  ac={tokens.access} />} />
+      <Route path={RouteLoop[i].pathname} element={<VideoRoom info={RouteLoop[i].info} />} />
     )
   }
+  //
+
+  useEffect(() => {
+    AuthCheck();
+    getUsername();
+  },[])
 
   return (
     <Router>
@@ -118,6 +121,7 @@ const App = () => {
           <Route path='' element={<Home log={logstatus} name={username} />} />
           <Route path="login" element={<Login log={logstatus} />} />
           <Route path="selectvroom" element={<SelectVRoom vrooms={vrooms} />} />
+          <Route path="videoroom/:uuid" element={<VideoRoom />} />
         </> : (
         <>
           <Route path='' element={<Home log={logstatus} name={username} />} />
