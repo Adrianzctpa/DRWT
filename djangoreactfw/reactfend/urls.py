@@ -5,5 +5,6 @@ urlpatterns = [
     path("login/", index),
     path("selectvroom/", index),
     path("videoroom/<uuid:uuid>", indexSPA),
+    path("createvroom/", index),
     path("", index),
 ]

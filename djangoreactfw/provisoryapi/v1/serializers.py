@@ -12,7 +12,7 @@ class VRoomSerializer(serializers.ModelSerializer):
             'created_at', 'videopath'
         )
         read_only_fields = (
-            "uuid", "created_at",
+            "uuid", "created_at", "owner"
         )
 
     def validate(self, data):

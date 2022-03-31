@@ -12,6 +12,7 @@ const Home = ({log, name}) => {
             <h5>Hello {name}! Pogchamp!</h5>
             <Link to="login">LOGOUT</Link>
             <Link to="selectvroom">SelectVRoom</Link>
+            <Link to="createvroom">CreateVRoom</Link>
             </>
             : (
             <Link to="login">LOGIN</Link> )

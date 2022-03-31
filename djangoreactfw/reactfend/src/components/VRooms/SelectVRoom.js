@@ -41,6 +41,7 @@ const SelectVRoom = ({vrooms}) => {
             <h1>Click in a Video Room</h1>
             
             <div id="RoomsDiv" />
+            <button>Create</button>
 
             <Link to="/">GO BACK</Link>
         </div>

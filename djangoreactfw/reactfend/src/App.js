@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes} from 'react-router-dom'
 import Home from './components/Home.js'
 import Login from "./components/Login.js"
-import SelectVRoom from "./components/SelectVRoom.js"
-import VideoRoom from "./components/VideoRoom.js"
+import SelectVRoom from "./components/VRooms/SelectVRoom.js"
+import CreateVRoom from "./components/VRooms/CreateVRoom.js"
+import VideoRoom from "./components/VRooms/VideoRoom.js"
 
 const App = () => {
   // States
@@ -122,6 +123,7 @@ const App = () => {
           <Route path="login" element={<Login log={logstatus} />} />
           <Route path="selectvroom" element={<SelectVRoom vrooms={vrooms} />} />
           <Route path="videoroom/:uuid" element={<VideoRoom />} />
+          <Route path="createvroom" element={<CreateVRoom />} />
         </> : (
         <>
           <Route path='' element={<Home log={logstatus} name={username} />} />
