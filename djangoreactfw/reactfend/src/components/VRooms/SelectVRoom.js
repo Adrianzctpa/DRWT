@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import "../../../static/css/SelectVRoom.css"
 import { Link, useNavigate } from "react-router-dom"
 
 const SelectVRoom = ({vrooms}) => {
@@ -37,7 +38,6 @@ const SelectVRoom = ({vrooms}) => {
 
     return (
         <div class="SelectVRoom">
-            <link rel="stylesheet" type="text/css" href="/static/css/SelectVRoom.css"/> 
             <h1>Click in a Video Room</h1>
             
             <div id="RoomsDiv" />

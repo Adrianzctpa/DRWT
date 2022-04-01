@@ -60,6 +60,7 @@ const App = () => {
     let data = await response.json()
     
     if (response.status === 200) {
+      console.log(data)
       setTokens({access: data.access, refresh: data.refresh})
       localStorage.setItem('access',  data.access)
       localStorage.setItem('refresh', data.refresh)
