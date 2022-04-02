@@ -11,9 +11,6 @@ db.sqlite3
 *.userosscache
 *.sln.docstates
 
-#MEDIA FOLDER
-media/*
-
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
