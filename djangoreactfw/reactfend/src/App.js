@@ -40,6 +40,7 @@ const App = () => {
     
     if (response.status === 200) {
       setUsername(data[0].username)
+      console.log(ac)
       GetVRooms()
     } else {
       UpdateToken()
