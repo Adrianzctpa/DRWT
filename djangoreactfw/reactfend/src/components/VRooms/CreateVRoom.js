@@ -1,7 +1,7 @@
 import React from "react";
 import "../../../static/css/CreateVRoom.css"
 
-const CreateVRoom = () => {
+const CreateVRoom = ({ac}) => {
 
     const VerifyFile = (e) => {
         const SupportedFiles = ["image/jpg", "image/png", 
@@ -18,9 +18,27 @@ const CreateVRoom = () => {
         return includes;
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        console.log(e.target.vpath.files)
+
+        let formData = new FormData()
+        formData.append("title", e.target.title.value)
+        formData.append("guest_pause_permission", e.target.pause_perm.checked)
+        formData.append("videopath", e.target.vpath.files[0])
+
+        let response = await fetch("/v1/vroomset/", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${ac}`
+            },
+            body: formData
+        })
+        let data = await response.json()
+        
+        if (response.status === 201) {
+            console.log(JSON.stringify(data, e))
+        }
+        
     }
 
     return (
@@ -33,7 +51,7 @@ const CreateVRoom = () => {
                 <input type="checkbox" name="pause_perm" />
 
                 <label>Select a video to share:</label>
-                <input onChange={VerifyFile} id="file" type="file" name="vpath" accept="image/png, image/jpeg, image/jpg, image/webp, video/mp4, video/x-m4v" />
+                <input onChange={(e) => console.log(e)} id="file" type="file" name="vpath" accept="image/png, image/jpeg, image/jpg, image/webp, video/mp4, video/x-m4v" />
 
                 <button type="submit">Create</button>
             </form>

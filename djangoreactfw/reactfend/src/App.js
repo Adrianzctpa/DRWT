@@ -40,7 +40,6 @@ const App = () => {
     
     if (response.status === 200) {
       setUsername(data[0].username)
-      console.log(ac)
       GetVRooms()
     } else {
       UpdateToken()
@@ -61,7 +60,6 @@ const App = () => {
     let data = await response.json()
     
     if (response.status === 200) {
-      console.log(data)
       setTokens({access: data.access, refresh: data.refresh})
       localStorage.setItem('access',  data.access)
       localStorage.setItem('refresh', data.refresh)
@@ -125,7 +123,7 @@ const App = () => {
           <Route path="login" element={<Login log={logstatus} />} />
           <Route path="selectvroom" element={<SelectVRoom vrooms={vrooms} />} />
           <Route path="videoroom/:uuid" element={<VideoRoom />} />
-          <Route path="createvroom" element={<CreateVRoom />} />
+          <Route path="createvroom" element={<CreateVRoom ac={tokens.access} />} />
         </> : (
         <>
           <Route path='' element={<Home log={logstatus} name={username} />} />

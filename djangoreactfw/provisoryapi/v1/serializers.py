@@ -17,6 +17,14 @@ class VRoomSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         super().validate(data)
+        types = ["image", "video"]
+        filetype = data['videopath'].content_type.split('/')[0]
+        
+        if not filetype in types:
+            raise serializers.ValidationError({
+                'videopath': 'File must be a Video or Image'
+            })
+
         if self.instance:
             try:
                 data.pop("owner")
