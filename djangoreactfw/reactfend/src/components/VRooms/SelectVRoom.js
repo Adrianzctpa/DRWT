@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import "../../../static/css/SelectVRoom.css"
+import styles from "../../../static/css/SelectVRoom.module.css"
 import { Link, useNavigate } from "react-router-dom"
 
 const SelectVRoom = ({vrooms}) => {
@@ -11,7 +11,7 @@ const SelectVRoom = ({vrooms}) => {
         
         vrooms.forEach((e,k,a) => {
             let div = document.createElement("div")
-            div.classList.add("Room")
+            div.classList.add(styles.Room)
             div.onclick = () => {
                 navigate(`/videoroom/${e.uuid}`)
             }
@@ -37,10 +37,10 @@ const SelectVRoom = ({vrooms}) => {
     })
 
     return (
-        <div class="SelectVRoom">
+        <div>
             <h1>Click in a Video Room</h1>
             
-            <div id="RoomsDiv" />
+            <div id="RoomsDiv" className={styles.RoomsDiv} />
             <button>Create</button>
 
             <Link to="/">GO BACK</Link>

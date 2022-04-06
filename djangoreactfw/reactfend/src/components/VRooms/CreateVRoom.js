@@ -1,5 +1,5 @@
 import React from "react";
-import "../../../static/css/CreateVRoom.css"
+import styles from "../../../static/css/CreateVRoom.module.css"
 
 const CreateVRoom = ({ac}) => {
 
@@ -43,7 +43,7 @@ const CreateVRoom = ({ac}) => {
 
     return (
         <>
-            <form onSubmit={handleSubmit}>
+            <form className={styles.form} onSubmit={handleSubmit}>
                 <label>Title:</label>
                 <input type="text" name="title" />
 

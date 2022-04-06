@@ -2,9 +2,9 @@ html, body {
     width: 100%;
 }
 
-#RoomsDiv {
+.RoomsDiv {
     display: flex;
-    flex-direction: row;
+    flex-flow: column;
 }
 
 .Room {
@@ -13,5 +13,6 @@ html, body {
     padding: 0.5em;
     margin-left: 20px;
     margin-right: 20px;
+    margin-bottom: 20px;
     cursor: pointer; 
 }
