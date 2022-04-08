@@ -51,7 +51,7 @@ const CreateVRoom = ({ac}) => {
                 <input type="checkbox" name="pause_perm" />
 
                 <label>Select a video to share:</label>
-                <input onChange={(e) => console.log(e)} id="file" type="file" name="vpath" accept="image/png, image/jpeg, image/jpg, image/webp, video/mp4, video/x-m4v" />
+                <input id="file" type="file" name="vpath" accept="image/png, image/jpeg, image/jpg, image/webp, video/mp4, video/x-m4v" />
 
                 <button type="submit">Create</button>
             </form>

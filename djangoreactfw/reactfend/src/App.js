@@ -96,14 +96,14 @@ const App = () => {
   const RouteLoop = []
   vrooms.forEach((e) => {
     RouteLoop.push({
-      pathname: `videoroom/${e.uuid}`,
+      pathname: `videoroom/${e.uuid}/`,
       info: e})
   })
 
   const RouteComponents = [];
   for (var i = 0; i < RouteLoop.length; i++) {
     RouteComponents.push(
-      <Route path={RouteLoop[i].pathname} element={<VideoRoom info={RouteLoop[i].info} />} />
+      <Route path={RouteLoop[i].pathname} element={<VideoRoom ac={tokens.access} uuid={RouteLoop[i].uuid} info={RouteLoop[i].info} />} />
     )
   }
   //
@@ -122,7 +122,7 @@ const App = () => {
           <Route path='' element={<Home log={logstatus} name={username} />} />
           <Route path="login" element={<Login log={logstatus} />} />
           <Route path="selectvroom" element={<SelectVRoom vrooms={vrooms} />} />
-          <Route path="videoroom/:uuid" element={<VideoRoom />} />
+          <Route path="videoroom/:uuid/" element={<VideoRoom />} />
           <Route path="createvroom" element={<CreateVRoom ac={tokens.access} />} />
         </> : (
         <>
