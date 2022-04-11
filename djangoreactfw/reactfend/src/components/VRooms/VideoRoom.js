@@ -1,10 +1,8 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import Player from './Player.js'
 import styles from "../../../static/css/VideoRoom.module.css"
 
 const VideoRoom = ({info, ac}) => {
-
-    const navigate = useNavigate();
 
     const handleEdit = () => {
         if (document.querySelector('form').style.display === '') {
@@ -49,10 +47,10 @@ const VideoRoom = ({info, ac}) => {
                 info === undefined ? 
                 <h1>PROHIBITED ACCESS</h1> : (
                 <div> 
-                    <p>{info.title}</p>
-                    <h1>{info.owner}</h1>
-                    <h1>{info.guest_pause_permission.toString()}</h1>
-                    <h1>{info.videopath}</h1>
+                    <p>Title: {info.title}</p>
+                    <h1>Owner: {info.owner}</h1>
+                    <h1>Guest Pause: {info.guest_pause_permission.toString()}</h1>
+                    <Player url={info.videopath}/>
 
                     <button onClick={handleEdit}>Edit</button>
 
