@@ -12,6 +12,7 @@ const Player = ({url}) => {
 
             if (filetype === 'image') {
                 const img = new Image()
+                
                 img.height = 300;
                 img.width = 500;
                 img.src = URLFile
@@ -24,6 +25,7 @@ const Player = ({url}) => {
 
                 const controls = document.createElement('div')
                 const btn = document.createElement('button')
+
                 controls.classList.add('controls')
                 btn.textContent = 'Play'
                 btn.onclick = () => {
@@ -33,6 +35,7 @@ const Player = ({url}) => {
                         video.play()
                     }
                 }
+
                 controls.appendChild(btn)
                 div.appendChild(controls)
             }

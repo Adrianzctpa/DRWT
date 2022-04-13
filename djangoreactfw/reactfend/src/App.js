@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes} from 'react-router-dom'
 import Home from './components/Home.js'
-import Login from "./components/Login.js"
+import Login from './components/Login.js'
+import Register from  './components/Register.js'
 import SelectVRoom from "./components/VRooms/SelectVRoom.js"
 import CreateVRoom from "./components/VRooms/CreateVRoom.js"
 import VideoRoom from "./components/VRooms/VideoRoom.js"
@@ -128,6 +129,7 @@ const App = () => {
         <>
           <Route path='' element={<Home log={logstatus} name={username} />} />
           <Route path="login" element={<Login log={logstatus} />} />
+          <Route path="register" element={<Register />} />
         </>)
         }
       </Routes>  
