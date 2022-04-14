@@ -41,7 +41,7 @@ const App = () => {
     
     if (response.status === 200) {
       setUsername(data[0].username)
-      GetVRooms()
+      GetUserVRooms()
     } else {
       UpdateToken()
     }
@@ -76,9 +76,9 @@ const App = () => {
   //
 
   // Get VideoRooms
-  const GetVRooms = async () => {
+  const GetUserVRooms = async () => {
     let ac = localStorage.getItem("access")
-    let response = await fetch("/v1/vroomset", {
+    let response = await fetch("/v1/vroomset/", {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -122,7 +122,7 @@ const App = () => {
           { RouteComponents }
           <Route path='' element={<Home log={logstatus} name={username} />} />
           <Route path="login" element={<Login log={logstatus} />} />
-          <Route path="selectvroom" element={<SelectVRoom vrooms={vrooms} />} />
+          <Route path="selectvroom/" element={<SelectVRoom vrooms={vrooms} />} />
           <Route path="videoroom/:uuid/" element={<VideoRoom />} />
           <Route path="createvroom" element={<CreateVRoom ac={tokens.access} />} />
         </> : (
