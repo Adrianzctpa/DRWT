@@ -4,7 +4,7 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView, 
     TokenRefreshView
 )
-from .views import VRoomViewSet, GetVRoomsView
+from .views import VRoomViewSet, GetVRoomsView, room
 from users.api.v1.views import BlacklistView
 
 router = routers.SimpleRouter()

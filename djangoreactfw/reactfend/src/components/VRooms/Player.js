@@ -29,6 +29,7 @@ const Player = ({url}) => {
                 controls.classList.add('controls')
                 btn.textContent = 'Play'
                 btn.onclick = () => {
+                    console.log('clicked')
                     if (!video.paused) {
                         video.pause()
                     } else {

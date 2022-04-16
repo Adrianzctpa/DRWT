@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Player from './Player.js'
 import styles from "../../../static/css/VideoRoom.module.css"
 
@@ -41,16 +41,48 @@ const VideoRoom = ({info, ac}) => {
         }
     }
 
+    useEffect(() => {
+        if (info !== undefined) {
+            let url = `ws://${window.location.host}/ws/video/${info.uuid}`
+
+            const ChatSocket = new WebSocket(url)
+
+            ChatSocket.onopen = () => {
+                console.log('conected')
+            }
+
+            ChatSocket.ondisconnect = () => {
+                console.log('disconected')
+            }
+
+            let form = document.getElementById('lilform')
+            form.addEventListener('submit', (e)=> {
+                e.preventDefault()
+                let message = e.target.message.value 
+                ChatSocket.send(JSON.stringify({
+                    'message':message
+                }))
+                form.reset()
+            })
+        }
+    })
+
     return (
         <>
             {
                 info === undefined ? 
                 <h1>PROHIBITED ACCESS</h1> : (
-                <div> 
+                <div id="divvy"> 
                     <p>Title: {info.title}</p>
                     <h1>Owner: {info.owner}</h1>
                     <h1>Guest Pause: {info.guest_pause_permission.toString()}</h1>
                     <Player url={info.videopath}/>
+
+
+                    <form id="lilform" >
+                        <input type="text" name="message"></input>
+                        <button type="submit">SEND</button>
+                    </form>
 
                     <button onClick={handleEdit}>Edit</button>
 
@@ -67,7 +99,7 @@ const VideoRoom = ({info, ac}) => {
                         image/webp, video/mp4, video/x-m4v" />
 
                         <button type="submit">Edit</button>
-                    </form>
+                    </form>  
                 </div>)  
             }
         </>

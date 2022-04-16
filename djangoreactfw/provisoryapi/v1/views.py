@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from rest_framework import generics, viewsets, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -38,3 +39,8 @@ class GetVRoomsView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     queryset = VideoRoom.objects.all()
     serializer_class = VRoomSerializer
+
+def room(request, uuid):
+    return render(request, 'index.html', {
+        'uuid': uuid
+    })
