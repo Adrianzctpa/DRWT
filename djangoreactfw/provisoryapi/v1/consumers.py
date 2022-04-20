@@ -1,24 +1,43 @@
-import datetime
 import json
+from asgiref.sync import sync_to_async, async_to_sync
+from django.contrib.auth import get_user_model
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from channels.generic.websocket import AsyncWebsocketConsumer
 
-from asgiref.sync import async_to_sync
-from channels.generic.websocket import WebsocketConsumer
 
+class VRoomConsumer(AsyncWebsocketConsumer):
+    
+    user_model = get_user_model().objects.all()
+    users = []
 
-class VRoomConsumer(WebsocketConsumer):
-    def connect(self):
-        self.accept()
+    async def connect(self):  
+        self.room_group_name = self.room_name = self.scope['url_route']['kwargs']['uuid']
+        await (self.channel_layer.group_add)(self.room_group_name, self.channel_name)
+        await self.accept()
 
-        self.send(text_data=json.dumps({
-            'type': "connection_established",
-            'message': 'connected!'
-        }))
-
-    def disconnect(self, close_code):
+    async def disconnect(self, close_code):
         pass
+        # await self.channel_layer.group_send(
+        #     self.room_group_name,
+        #     {
+        #         "type": "disconnect",
+        #         "data": {"user": self.user_id},
+        #     },
+        # )
 
-    def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        message = text_data_json['message']
+        # user = self.get_username(self.user_id)
+        # self.users.remove(user)
+        # await (self.channel_layer.group_discard)(
+        #     self.room_group_name, self.channel_name
+        # )
 
-        print('Message:', message)
+
+    async def receive(self, text_data):
+        data = json.loads(text_data)
+
+        jwt = JWTAuthentication
+
+        try: 
+            jwt.get_validated_token(data['token'])
+        except:
+            self.close()

@@ -1,10 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
+import AuthContext from "../../context/AuthContext"
 import styles from "../../../static/css/SelectVRoom.module.css"
 import { Link, useNavigate } from "react-router-dom"
 
-const SelectVRoom = ({vrooms}) => {
+const SelectVRoom = () => {
 
-    let navigate = useNavigate();
+    const {vrooms} = useContext(AuthContext)
+    const navigate = useNavigate()
 
     const GenerateVrooms = () => {
         let RoomsDiv = document.getElementById("RoomsDiv")
@@ -32,6 +34,10 @@ const SelectVRoom = ({vrooms}) => {
         })
     }
 
+    const handleClick = (e) => {
+        e.preventDefault()
+    }
+
     useEffect(() => {
         GenerateVrooms()
     })
@@ -40,6 +46,7 @@ const SelectVRoom = ({vrooms}) => {
         <div>
             <h1>Click in a Video Room</h1>
             
+            <button onClick={handleClick}>All Video Rooms</button>
             <div id="RoomsDiv" className={styles.RoomsDiv} />
             <button>Create</button>
 

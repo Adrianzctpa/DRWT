@@ -1,6 +1,9 @@
-from django.urls import re_path
+from django.urls import path
 from . import consumers
 
+
+#(?P<uuid>[0-9a-f\-]{32,})$
+
 websocket_urlpatterns = [
-    re_path(r"ws/video/", consumers.VRoomConsumer.as_asgi()),
+    path("ws/video/<uuid>", consumers.VRoomConsumer.as_asgi()),
 ]

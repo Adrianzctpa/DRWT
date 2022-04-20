@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 import Player from './Player.js'
 import styles from "../../../static/css/VideoRoom.module.css"
 
-const VideoRoom = ({info, ac}) => {
+const VideoRoom = ({info, ac, uid}) => {
 
     const handleEdit = () => {
         if (document.querySelector('form').style.display === '') {
@@ -43,7 +43,7 @@ const VideoRoom = ({info, ac}) => {
 
     useEffect(() => {
         if (info !== undefined) {
-            let url = `ws://${window.location.host}/ws/video/${info.uuid}`
+            let url = `ws://${window.location.host}/ws/video/${info.uuid}?token=${ac}`
 
             const ChatSocket = new WebSocket(url)
 
@@ -60,7 +60,9 @@ const VideoRoom = ({info, ac}) => {
                 e.preventDefault()
                 let message = e.target.message.value 
                 ChatSocket.send(JSON.stringify({
-                    'message':message
+                    'message': message,
+                    'from': uid,
+                    'token': ac
                 }))
                 form.reset()
             })

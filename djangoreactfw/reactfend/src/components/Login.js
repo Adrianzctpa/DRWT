@@ -1,53 +1,21 @@
-import React from "react";
-import { Link, useNavigate } from "react-router-dom"
+import React, {useContext} from "react";
+import AuthContext from "../context/AuthContext"
+import { Link } from "react-router-dom"
 
-const Login = ({log}) => {
-    const navigate = useNavigate();
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        let response = await fetch("/v1/token/", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                username: e.target.username.value,
-                password: e.target.password.value
-            })
-        })
-        
-        let data = await response.json()
-        if (response.status === 200) {
-            localStorage.setItem('access', data.access)
-            localStorage.setItem('refresh', data.refresh)
-            console.log("made tokens!")
-            navigate("/")
-            window.location.reload(false)
-        } else {
-            alert("No account found with given credentials")
-        }       
-    }
-
-    const LogOut = () => {
-        localStorage.removeItem("access")
-        localStorage.removeItem("refresh")
-        console.log("removed.")
-        window.location.reload(false)
-    }
+const Login = () => {
+    const {logstatus, login, logout} = useContext(AuthContext)
 
     return (
         <div>
-            { log ?
+            { logstatus ?
                 <>
                     <h1>Logout</h1>
-                    <button onClick={LogOut}>Logout</button>
+                    <button onClick={logout}>Logout</button>
                     <Link to="/">GO BACK</Link>
                 </> : (
                 <>
                     <h1>Login</h1>
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={login}>
                         <label>username</label>
                         <input type="username" name="username" />
 
