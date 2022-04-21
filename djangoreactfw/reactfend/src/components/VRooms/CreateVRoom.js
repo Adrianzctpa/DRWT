@@ -1,22 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
+import { useNavigate } from 'react-router-dom'
+import AuthContext from "../../context/AuthContext"
 import styles from "../../../static/css/CreateVRoom.module.css"
 
-const CreateVRoom = ({ac}) => {
+const CreateVRoom = () => {
 
-    const VerifyFile = (e) => {
-        const SupportedFiles = ["image/jpg", "image/png", 
-        "image/jpeg", "image/webp", "video/mp4", "video/x-m4v"]
-    
-        const filetype = e.target.files[0].type
-        let includes = false
-        console.log(filetype)
-
-        if (SupportedFiles.includes(filetype)) {
-            includes = true;
-        }
-
-        return includes;
-    }
+    const {tokens} = useContext(AuthContext)
+    const navigate = useNavigate()
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -29,14 +19,15 @@ const CreateVRoom = ({ac}) => {
         let response = await fetch("/v1/vroomset/", {
             method: "POST",
             headers: {
-                "Authorization": `Bearer ${ac}`
+                "Authorization": `Bearer ${tokens.access}`
             },
             body: formData
         })
         let data = await response.json()
         
-        if (response.status === 201) {
-            console.log(JSON.stringify(data, e))
+        if (response.status === 200) {
+            navigate(`/videoroom/${data.resp.uuid}/`)
+            window.location.reload(false)
         }
         
     }

@@ -41,3 +41,19 @@ class VRoomConsumer(AsyncWebsocketConsumer):
             jwt.get_validated_token(data['token'])
         except:
             self.close()
+        self.user_id = data["from"]
+
+        if data['type'] == "chat_message":
+            await self.channel_layer.group_send(self.room_group_name,
+            {
+                'type': 'chat_message',
+                'message': data['message']
+            })
+
+    async def chat_message(self, event):
+        message = event['message']
+
+        await self.send(text_data=json.dumps({
+            'type': 'chat',
+            'message': message
+        }))

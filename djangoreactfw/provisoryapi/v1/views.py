@@ -33,7 +33,7 @@ class VRoomViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=req)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response({'status':status.HTTP_200_OK})
+        return Response({'status':status.HTTP_200_OK, 'resp': serializer.data})
 
 class GetVRoomsView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]

@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Route, Routes} from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import AuthContext from './context/AuthContext.js'
 import Home from './components/Home.js'
 import Login from './components/Login.js'
@@ -16,20 +16,19 @@ const App = () => {
     RouteLoop.push({
       pathname: `videoroom/${e.uuid}/`,
       info: e,
-      uid: e.uid})
+      owner: e.owner})
   })
 
   const RouteComponents = [];
   for (var i = 0; i < RouteLoop.length; i++) {
     RouteComponents.push(
       <Route path={RouteLoop[i].pathname} 
-      element={<VideoRoom uid={RouteLoop[i].uid} 
-      info={RouteLoop[i].info} ac={context.tokens.access} />} 
+      element={<VideoRoom owner={RouteLoop[i].owner} 
+      info={RouteLoop[i].info} ac={context.tokens?.access} />} 
       />
     )
   }
  
-
   return (
     <Routes>
       {context.logstatus ? 

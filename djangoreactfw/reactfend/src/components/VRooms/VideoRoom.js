@@ -1,16 +1,18 @@
-import React, {useEffect} from "react";
+import React from "react";
+import Chat from "./Chat.js"
 import Player from './Player.js'
 import styles from "../../../static/css/VideoRoom.module.css"
 
-const VideoRoom = ({info, ac, uid}) => {
+const VideoRoom = ({info, ac, owner}) => {
 
     const handleEdit = () => {
-        if (document.querySelector('form').style.display === '') {
-            document.querySelector('form').style.display = 'flex'
-            document.querySelector("button").textContent = 'Close'
+        let form  = document.QuerySelector('form')[1]
+        if (form.style.display === '') {
+            form.style.display = 'flex'
+            document.querySelector("button")[1].textContent = 'Close'
         } else {
-            document.querySelector('form').style.display = ''
-            document.querySelector("button").textContent = 'Edit'
+            form.style.display = ''
+            document.querySelector("button")[1].textContent = 'Edit'
         }
     }
 
@@ -41,34 +43,6 @@ const VideoRoom = ({info, ac, uid}) => {
         }
     }
 
-    useEffect(() => {
-        if (info !== undefined) {
-            let url = `ws://${window.location.host}/ws/video/${info.uuid}?token=${ac}`
-
-            const ChatSocket = new WebSocket(url)
-
-            ChatSocket.onopen = () => {
-                console.log('conected')
-            }
-
-            ChatSocket.ondisconnect = () => {
-                console.log('disconected')
-            }
-
-            let form = document.getElementById('lilform')
-            form.addEventListener('submit', (e)=> {
-                e.preventDefault()
-                let message = e.target.message.value 
-                ChatSocket.send(JSON.stringify({
-                    'message': message,
-                    'from': uid,
-                    'token': ac
-                }))
-                form.reset()
-            })
-        }
-    })
-
     return (
         <>
             {
@@ -78,13 +52,8 @@ const VideoRoom = ({info, ac, uid}) => {
                     <p>Title: {info.title}</p>
                     <h1>Owner: {info.owner}</h1>
                     <h1>Guest Pause: {info.guest_pause_permission.toString()}</h1>
+                    <Chat owner={owner} ac={ac} uuid={info.uuid}/>
                     <Player url={info.videopath}/>
-
-
-                    <form id="lilform" >
-                        <input type="text" name="message"></input>
-                        <button type="submit">SEND</button>
-                    </form>
 
                     <button onClick={handleEdit}>Edit</button>
 

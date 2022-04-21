@@ -9,9 +9,7 @@ export default AuthContext;
 export const AuthProvider = ({children}) => {
     const [username, setUsername] = useState(null) 
     const [logstatus, setLogStatus] = useState(false)
-    const [tokens, setTokens] = useState({
-    access: "", refresh: ""
-    })
+    const [tokens, setTokens] = useState(() => localStorage.getItem('tokens') ? JSON.parse(localStorage.getItem('tokens')) : null)
     const [vrooms, setVrooms] = useState([])
     const [uid, setUid] = useState(null)
     const [loading, setLoading] = useState(true)
@@ -34,15 +32,8 @@ export const AuthProvider = ({children}) => {
         
         let data = await response.json()
         if (response.status === 200) {
-            localStorage.setItem('access', data.access)
-            localStorage.setItem('refresh', data.refresh)
-            
-            setLogStatus(true)
-            setTokens({
-                access: data.access, refresh: data.refresh
-            })
-            
-            console.log("made tokens!")
+            localStorage.setItem('tokens', JSON.stringify(data))
+            setTokens(data)
             navigate("/")
             window.location.reload(false)
         } else {
@@ -50,13 +41,13 @@ export const AuthProvider = ({children}) => {
         }       
     }
 
-    const LogOut = () => {
-        localStorage.removeItem("access")
-        localStorage.removeItem("refresh")
-        setTokens({
-            access: "",  refresh: ""
-        })
-        console.log("removed.")
+    const LogOut = (e) => { 
+        e.preventDefault()
+        
+        localStorage.removeItem("tokens")
+        setTokens(null)
+        navigate("/login/")
+        window.location.reload(false)
     }
 
     const Register = async (e) => {
@@ -85,19 +76,19 @@ export const AuthProvider = ({children}) => {
     }
 
     const getUsername = async () => {
-        let ac = localStorage.getItem("access")
         let response = await fetch("/v1/users/", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${ac}`
+            "Authorization": `Bearer ${tokens?.access}`
           }
         })
         let data = await response.json()
         
         if (response.status === 200) {
+          setLogStatus(true)
           setUsername(data[0].username)
-          setUid(jwt_decode(ac).user_id)
+          setUid(jwt_decode(tokens.access).user_id)
           GetVRooms()
         } else {
           UpdateToken()
@@ -105,27 +96,26 @@ export const AuthProvider = ({children}) => {
     }
 
     const UpdateToken = async () => {
-        let rt = localStorage.getItem("refresh")
         let response = await fetch("/v1/token/refresh/", {
             method: "POST",
             headers: {
             "Content-Type": "application/json",
             },
             body: JSON.stringify({
-            refresh: rt
+            refresh: tokens?.refresh
             })
         })
         let data = await response.json()
         
         if (response.status === 200) {
             setLogStatus(true)
-            setTokens({access: data.access, refresh: data.refresh})
-            localStorage.setItem('access',  data.access)
-            localStorage.setItem('refresh', data.refresh)
-            console.log("tokens refreshed!")
+            localStorage.setItem('tokens', JSON.stringify(data))
+            setTokens(data)
             getUsername();
         } else {
-            LogOut()
+            localStorage.removeItem("tokens")
+            setTokens(null)
+            navigate("/login/")
         }
 
         if (loading) {
@@ -134,12 +124,11 @@ export const AuthProvider = ({children}) => {
     }
     
     const GetVRooms = async () => {
-        let ac = localStorage.getItem("access")
         let response = await fetch("/v1/getvrooms/", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${ac}`
+                "Authorization": `Bearer ${tokens?.access}`
             }
         })
         let data = await response.json()
@@ -162,7 +151,7 @@ export const AuthProvider = ({children}) => {
 
     useEffect(() => {
         if (loading) {
-            UpdateToken()
+            getUsername()
         }    
     }, [tokens, loading])
 
