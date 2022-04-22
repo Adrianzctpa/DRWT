@@ -1,18 +1,23 @@
-import React from "react";
+import React, {useContext} from "react";
+import AuthContext from "../../context/AuthContext"
 import Chat from "./Chat.js"
 import Player from './Player.js'
 import styles from "../../../static/css/VideoRoom.module.css"
 
-const VideoRoom = ({info, ac, owner}) => {
+const VideoRoom = ({info, ac}) => {
+
+    const context = useContext(AuthContext)
 
     const handleEdit = () => {
-        let form  = document.QuerySelector('form')[1]
+        let form  = document.getElementById('editform')
+        let btn = document.getElementById('editbtn')
+        
         if (form.style.display === '') {
             form.style.display = 'flex'
-            document.querySelector("button")[1].textContent = 'Close'
+            btn.textContent = 'Close'
         } else {
             form.style.display = ''
-            document.querySelector("button")[1].textContent = 'Edit'
+            btn.textContent = 'Edit'
         }
     }
 
@@ -52,12 +57,12 @@ const VideoRoom = ({info, ac, owner}) => {
                     <p>Title: {info.title}</p>
                     <h1>Owner: {info.owner}</h1>
                     <h1>Guest Pause: {info.guest_pause_permission.toString()}</h1>
-                    <Chat owner={owner} ac={ac} uuid={info.uuid}/>
+                    <Chat username={context.username} ac={ac} uuid={info.uuid}/>
                     <Player url={info.videopath}/>
 
-                    <button onClick={handleEdit}>Edit</button>
+                    <button id="editbtn" onClick={handleEdit}>Edit</button>
 
-                    <form onSubmit={handleSubmit} className={styles.form}> 
+                    <form id="editform" onSubmit={handleSubmit} className={styles.form}> 
                         <label>Title:</label>
                         <input type="text" name="title" />
 

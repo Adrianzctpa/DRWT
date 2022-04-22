@@ -11,6 +11,7 @@ export const AuthProvider = ({children}) => {
     const [logstatus, setLogStatus] = useState(false)
     const [tokens, setTokens] = useState(() => localStorage.getItem('tokens') ? JSON.parse(localStorage.getItem('tokens')) : null)
     const [vrooms, setVrooms] = useState([])
+    const [uservrooms, setUserVrooms] = useState([])
     const [uid, setUid] = useState(null)
     const [loading, setLoading] = useState(true)
 
@@ -102,7 +103,7 @@ export const AuthProvider = ({children}) => {
             "Content-Type": "application/json",
             },
             body: JSON.stringify({
-            refresh: tokens?.refresh
+            'refresh': tokens?.refresh
             })
         })
         let data = await response.json()
@@ -113,9 +114,10 @@ export const AuthProvider = ({children}) => {
             setTokens(data)
             getUsername();
         } else {
+            console.log(tokens)
             localStorage.removeItem("tokens")
             setTokens(null)
-            navigate("/login/")
+            navigate('/')
         }
 
         if (loading) {
@@ -135,6 +137,22 @@ export const AuthProvider = ({children}) => {
         
         if (response.status === 200) {
             setVrooms(data)
+            getUserVrooms()
+        }
+    }
+
+    const getUserVrooms = async () => {
+        let response = await fetch("/v1/vroomset/", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${tokens?.access}`
+            }
+        })
+        let data = await response.json()
+
+        if (response.status === 200) {
+            setUserVrooms(data)
         }
     }
 
@@ -144,6 +162,7 @@ export const AuthProvider = ({children}) => {
         logstatus: logstatus,
         uid: uid,
         vrooms: vrooms,
+        uvrooms: uservrooms,
         login: LogIn,
         logout: LogOut,
         register: Register,

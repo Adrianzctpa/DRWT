@@ -31,7 +31,6 @@ class VRoomConsumer(AsyncWebsocketConsumer):
         #     self.room_group_name, self.channel_name
         # )
 
-
     async def receive(self, text_data):
         data = json.loads(text_data)
 
@@ -47,7 +46,8 @@ class VRoomConsumer(AsyncWebsocketConsumer):
             await self.channel_layer.group_send(self.room_group_name,
             {
                 'type': 'chat_message',
-                'message': data['message']
+                'message': data['message'],
+                'from': data['from'],
             })
 
     async def chat_message(self, event):
@@ -55,5 +55,6 @@ class VRoomConsumer(AsyncWebsocketConsumer):
 
         await self.send(text_data=json.dumps({
             'type': 'chat',
-            'message': message
+            'message': message,
+            'from': event['from'],
         }))

@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 
-const Chat = ({uuid, owner, ac}) => {
+const Chat = ({uuid, username, ac}) => {
 
     useEffect(() => {
         let url = `ws://${window.location.host}/ws/video/${uuid}`
@@ -8,21 +8,20 @@ const Chat = ({uuid, owner, ac}) => {
         const ChatSocket = new WebSocket(url)
 
         ChatSocket.onopen = () => {
-            console.log('conected')
+            console.log('connected')
         }
 
         ChatSocket.ondisconnect = () => {
-            console.log('disconected')
+            console.log('disconnected')
         }
 
         ChatSocket.onmessage = (e) => {
             let data = JSON.parse(e.data)
-            console.log(data)
 
             if (data.type === 'chat') {
                 let chat = document.getElementById('chat')
                 let p = document.createElement('p')
-                p.textContent = data.message
+                p.textContent = `${data.from}: ${data.message}`
                 chat.appendChild(p)
             }
         }
@@ -33,14 +32,14 @@ const Chat = ({uuid, owner, ac}) => {
             let message = e.target.message.value 
             ChatSocket.send(JSON.stringify({
                 'message': message,
-                'from': owner,
+                'from': username,
                 'token': ac,
                 'type': 'chat_message'
             }))
             form.reset()
         })
 
-    })
+    }, [])
 
     return (
         <>    
