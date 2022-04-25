@@ -28,9 +28,7 @@ const SelectVRoom = () => {
         <>
             <div>    
                 <h1>Click in a Video Room</h1>
-                
                 <button onClick={handleClick} id="vroombtn">All Video Rooms</button>
-                <input type="text" id="inputquery" placeholder="Search..."/>
                 <button onClick={() => navigate('/createvroom')}>Create</button>
                 <Link to="/">GO BACK</Link>
                 <div id="RoomsDiv" className={styles.RoomsDiv}>

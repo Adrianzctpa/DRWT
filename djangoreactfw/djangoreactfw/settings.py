@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'channels',
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
+    'django_filters',
     'provisoryapi.apps.ProvisoryapiConfig',  
     'reactfend.apps.ReactfendConfig',
     'users.apps.UsersConfig',
@@ -112,6 +113,8 @@ STATIC_ROOT = "static/"
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 10,
+
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
 
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',

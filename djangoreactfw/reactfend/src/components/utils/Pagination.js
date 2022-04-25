@@ -1,14 +1,19 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import AuthContext from "../../context/AuthContext"
+import SearchFilter from "./SearchFilter"
 import styles from "../../../static/css/SelectVRoom.module.css"
 import { useNavigate } from 'react-router-dom'
 
 const Pagination = ({rooms}) => {
     const navigate = useNavigate()
     const {tokens} = useContext(AuthContext)
-    
-    //pagination logic
-    const pageNumbers = [];
+
+    let url;
+    if (rooms.id === 'Vrooms') {
+        url = '/v1/getvrooms/' 
+    } else {
+        url = '/v1/vroomset/'
+    }
 
     const tokenFetch = async (url) => {
         let response = await fetch(url, {
@@ -18,8 +23,10 @@ const Pagination = ({rooms}) => {
             }
         })
         let data = await response.json()
-        return {'status': response.status, 
-        'data': data}
+        
+        if (response.status === 200) {
+            setRoomsRoute(loadVrooms(data.results))
+        }
     }
 
     const loadVrooms = (arr) => {
@@ -33,41 +40,33 @@ const Pagination = ({rooms}) => {
     }
 
     const handleClick = async (e) => {
+        e.preventDefault();
         const number = parseInt(e.target.textContent)
-        let url;
-        if (rooms.id === 'Vrooms') {
-            url = '/v1/getvrooms/' 
-        } else {
-            url = '/v1/vroomset/'
+        switch (number) {
+            case 1:
+                tokenFetch(`${url}?limit=10`)
+                break;           
+            default:
+                tokenFetch(`${url}?limit=10&offset=${number * 10 - 10}`)
         }
-
-        if (number === 1) {
-            let response = await tokenFetch(`${url}?limit=10`)
-            
-            if (response.status === 200) {
-                setRoomsRoute(loadVrooms(response.data.results))
-            }
-        } else {
-            let response = await tokenFetch(`${url}?limit=10&offset=${number * 10 - 10}`)
-
-            if (response.status === 200) {
-                setRoomsRoute(loadVrooms(response.data.results))
-            }
-        }
+        
     }
 
+    const pageNumbers = [];
     const loadPages = (arr) => {
         if (arr.count > 10) {
             const pages = Math.ceil(arr.count / 10)
             for (let i = 1; i <= pages; i++) {
-                pageNumbers.push(i)
+                if (!pageNumbers.includes(i)) {    
+                    pageNumbers.push(i)
+                }    
             }
             
             return pageNumbers.map(number => (
                 <li key={number}>
-                    <a onClick={handleClick} href="#">
+                    <button onClick={handleClick}>
                         {number}
-                    </a>
+                    </button>
                 </li>
             ))
         }       
@@ -75,9 +74,12 @@ const Pagination = ({rooms}) => {
 
     const [roomsRoute, setRoomsRoute] = useState(loadVrooms(rooms.results))
     const [pages, setPages] = useState(loadPages(rooms))
-    
+
     return (
         <>  
+            <SearchFilter rooms={rooms} setRoomsRoute={setRoomsRoute}
+            loadVrooms={loadVrooms} setPages={setPages}
+            loadPages={loadPages}/>
             {roomsRoute}
             {pages}
         </>    

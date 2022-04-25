@@ -47,6 +47,7 @@ export const AuthProvider = ({children}) => {
         localStorage.removeItem("tokens")
         setTokens(null)
         navigate("/login/")
+        window.location.reload(false)
     }
 
     const RegisterUser = async (e) => {
@@ -108,6 +109,7 @@ export const AuthProvider = ({children}) => {
             localStorage.setItem('tokens', JSON.stringify(data))
             setTokens(JSON.parse(localStorage.getItem('tokens')))
             getUsername()
+            window.location.reload(false)
         } else {
             localStorage.removeItem("tokens")
             setTokens(null)
