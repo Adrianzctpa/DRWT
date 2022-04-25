@@ -35,12 +35,12 @@ class VRoomViewSet(viewsets.ModelViewSet):
         serializer.save()
         return Response({'status':status.HTTP_200_OK, 'resp': serializer.data})
 
-class GetVRoomsView(generics.ListAPIView):
+class GetVRoomsViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated]
-    queryset = VideoRoom.objects.all()
     serializer_class = VRoomSerializer
+    lookup_field = "uuid"
 
-def room(request, uuid):
-    return render(request, 'index.html', {
-        'uuid': uuid
-    })
+    def get_queryset(self):
+        if self.action == 'retrieve':
+            return VideoRoom.objects.filter(uuid=self.kwargs.get("uuid"))
+        return VideoRoom.objects.all()    

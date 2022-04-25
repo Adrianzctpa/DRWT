@@ -1,12 +1,14 @@
-import React, {useContext} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import AuthContext from "../../context/AuthContext"
-import Chat from "./Chat.js"
-import Player from './Player.js'
+import Chat from "../utils/Chat.js"
+import Player from '../utils/Player.js'
 import styles from "../../../static/css/VideoRoom.module.css"
 
-const VideoRoom = ({info, ac}) => {
+const VideoRoom = () => {
 
     const context = useContext(AuthContext)
+    const [loading, setLoading] = useState(true)
+    const [info, setInfo] = useState(null)
 
     const handleEdit = () => {
         let form  = document.getElementById('editform')
@@ -34,7 +36,7 @@ const VideoRoom = ({info, ac}) => {
         let response = await fetch(`/v1/vroomset/${info.uuid}/`, {
             method: "PATCH",
             headers: {
-                "Authorization": `Bearer ${ac}`
+                "Authorization": `Bearer ${context.tokens.access}`
             },
             body: formData
         })
@@ -48,16 +50,35 @@ const VideoRoom = ({info, ac}) => {
         }
     }
 
+    const RoomCheck = async () => {
+        const uuid = window.location.pathname.slice(10, 48)
+
+        let response = await fetch('/v1/getvrooms' + uuid, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${context.tokens.access}`
+            }
+        })
+        let data = await response.json()
+
+        if (response.status === 200) {
+            setInfo(data)
+            setLoading(false)
+        } 
+    }
+
+    useEffect(() => {
+        RoomCheck()
+    }, [])
+
     return (
         <>
-            {
-                info === undefined ? 
-                <h1>PROHIBITED ACCESS</h1> : (
-                <div id="divvy"> 
+            { loading ? <h1>404 - Room not found</h1> : (
+                <div> 
                     <p>Title: {info.title}</p>
                     <h1>Owner: {info.owner}</h1>
                     <h1>Guest Pause: {info.guest_pause_permission.toString()}</h1>
-                    <Chat username={context.username} ac={ac} uuid={info.uuid}/>
+                    <Chat username={context.username} ac={context.tokens.access} uuid={info.uuid}/>
                     <Player url={info.videopath}/>
 
                     <button id="editbtn" onClick={handleEdit}>Edit</button>
@@ -76,8 +97,8 @@ const VideoRoom = ({info, ac}) => {
 
                         <button type="submit">Edit</button>
                     </form>  
-                </div>)  
-            }
+                </div>
+            )}
         </>
     )
 }

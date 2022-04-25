@@ -3,16 +3,11 @@ import AuthContext from "../context/AuthContext"
 import { Link } from "react-router-dom"
 
 const Login = () => {
-    const {logstatus, login, logout} = useContext(AuthContext)
+    const {loading, login, logout} = useContext(AuthContext)
 
     return (
         <div>
-            { logstatus ?
-                <>
-                    <h1>Logout</h1>
-                    <button onClick={logout}>Logout</button>
-                    <Link to="/">GO BACK</Link>
-                </> : (
+            { loading ?
                 <>
                     <h1>Login</h1>
                     <form onSubmit={login}>
@@ -26,7 +21,13 @@ const Login = () => {
                     </form>
                     <Link to='/register'>Don't have an account?</Link>
                     <Link to="/">GO BACK</Link>
-                </>) 
+                </> : (
+                <>
+                    <h1>Logout</h1>
+                    <button onClick={logout}>Logout</button>
+                    <Link to="/">GO BACK</Link>
+                </>
+                )
             }
         </div>  
     )

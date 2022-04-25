@@ -1,5 +1,4 @@
 import json
-from asgiref.sync import sync_to_async, async_to_sync
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from channels.generic.websocket import AsyncWebsocketConsumer

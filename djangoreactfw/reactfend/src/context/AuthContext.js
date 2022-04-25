@@ -8,7 +8,6 @@ export default AuthContext;
 
 export const AuthProvider = ({children}) => {
     const [username, setUsername] = useState(null) 
-    const [logstatus, setLogStatus] = useState(false)
     const [tokens, setTokens] = useState(() => localStorage.getItem('tokens') ? JSON.parse(localStorage.getItem('tokens')) : null)
     const [vrooms, setVrooms] = useState([])
     const [uservrooms, setUserVrooms] = useState([])
@@ -34,7 +33,7 @@ export const AuthProvider = ({children}) => {
         let data = await response.json()
         if (response.status === 200) {
             localStorage.setItem('tokens', JSON.stringify(data))
-            setTokens(data)
+            setTokens(JSON.parse(localStorage.getItem('tokens')))
             navigate("/")
             window.location.reload(false)
         } else {
@@ -48,10 +47,9 @@ export const AuthProvider = ({children}) => {
         localStorage.removeItem("tokens")
         setTokens(null)
         navigate("/login/")
-        window.location.reload(false)
     }
 
-    const Register = async (e) => {
+    const RegisterUser = async (e) => {
         e.preventDefault();
 
         let response = await fetch("/v1/createusers", {
@@ -66,7 +64,6 @@ export const AuthProvider = ({children}) => {
                 'password': e.target.password.value
             })
         })
-        let data = await response.json()
 
         if (response.status === 200) {
             navigate('/login/')
@@ -87,8 +84,7 @@ export const AuthProvider = ({children}) => {
         let data = await response.json()
         
         if (response.status === 200) {
-          setLogStatus(true)
-          setUsername(data[0].username)
+          setUsername(data.results[0].username)
           setUid(jwt_decode(tokens.access).user_id)
           GetVRooms()
         } else {
@@ -109,19 +105,13 @@ export const AuthProvider = ({children}) => {
         let data = await response.json()
         
         if (response.status === 200) {
-            setLogStatus(true)
             localStorage.setItem('tokens', JSON.stringify(data))
-            setTokens(data)
-            getUsername();
+            setTokens(JSON.parse(localStorage.getItem('tokens')))
+            getUsername()
         } else {
-            console.log(tokens)
             localStorage.removeItem("tokens")
             setTokens(null)
             navigate('/')
-        }
-
-        if (loading) {
-            setLoading(false)
         }
     }
     
@@ -136,6 +126,7 @@ export const AuthProvider = ({children}) => {
         let data = await response.json()
         
         if (response.status === 200) {
+            data.id = 'Vrooms'
             setVrooms(data)
             getUserVrooms()
         }
@@ -152,31 +143,36 @@ export const AuthProvider = ({children}) => {
         let data = await response.json()
 
         if (response.status === 200) {
+            data.id = 'UVrooms'
             setUserVrooms(data)
+        }
+
+        if (loading) {
+            setLoading(false)
         }
     }
 
-    let context = {
+    const context = {
         username: username,
         tokens: tokens,
-        logstatus: logstatus,
+        loading: loading,
         uid: uid,
         vrooms: vrooms,
         uvrooms: uservrooms,
         login: LogIn,
         logout: LogOut,
-        register: Register,
+        register: RegisterUser,
     } 
 
     useEffect(() => {
         if (loading) {
             getUsername()
-        }    
-    }, [tokens, loading])
+        }
+    }, [loading])
 
     return (
         <AuthContext.Provider value={context}>
-            {children}
+            { children }
         </AuthContext.Provider>
     )
 }

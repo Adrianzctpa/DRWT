@@ -45,8 +45,10 @@ const Player = ({url}) => {
     }
 
     useEffect(() => {
-        LoadMedia()
-    })
+        if (url !== undefined) {
+            LoadMedia()
+        }    
+    }, [url])
 
     return (
         <div id="mediawrapper" />
