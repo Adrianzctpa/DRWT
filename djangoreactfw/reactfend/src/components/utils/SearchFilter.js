@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import AuthContext from "../../context/AuthContext"
 
-const SearchFilter = ({rooms, setRoomsRoute, setExtData, 
+const SearchFilter = ({rooms, setRoomsRoute, 
                     loadVrooms, setPages, loadPages}) => {
     
     const {tokens} = useContext(AuthContext)

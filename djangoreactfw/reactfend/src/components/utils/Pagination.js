@@ -42,18 +42,30 @@ const Pagination = ({rooms}) => {
     const handleClick = async (e) => {
         e.preventDefault();
         const number = parseInt(e.target.textContent)
-        switch (number) {
-            case 1:
-                tokenFetch(`${url}?limit=10`)
-                break;           
-            default:
-                tokenFetch(`${url}?limit=10&offset=${number * 10 - 10}`)
-        }
+        const inputQuery = document.getElementById('inputquery').value
         
+        if (inputQuery !== '') {
+            switch(number) {
+                case 1: 
+                    tokenFetch(`${url}?limit=10&title=${inputQuery}`)
+                    break;
+                default: 
+                    tokenFetch(`${url}?limit=10&offset=${number * 10 - 10}&title=${inputQuery}`)    
+            }
+        } else {
+            switch (number) {
+                case 1:
+                    tokenFetch(`${url}?limit=10`)
+                    break;           
+                default:
+                    tokenFetch(`${url}?limit=10&offset=${number * 10 - 10}`)
+            }
+        }
     }
 
     const pageNumbers = [];
     const loadPages = (arr) => {
+
         if (arr.count > 10) {
             const pages = Math.ceil(arr.count / 10)
             for (let i = 1; i <= pages; i++) {
@@ -73,13 +85,17 @@ const Pagination = ({rooms}) => {
     }
 
     const [roomsRoute, setRoomsRoute] = useState(loadVrooms(rooms.results))
-    const [pages, setPages] = useState(loadPages(rooms))
+    const [pages, setPages] = useState('')
+
+    useEffect(() => {
+        setPages(loadPages(rooms))
+    }, [])
 
     return (
         <>  
             <SearchFilter rooms={rooms} setRoomsRoute={setRoomsRoute}
             loadVrooms={loadVrooms} setPages={setPages}
-            loadPages={loadPages}/>
+            loadPages={loadPages} />
             {roomsRoute}
             {pages}
         </>    
