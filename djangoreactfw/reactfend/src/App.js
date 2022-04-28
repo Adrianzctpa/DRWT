@@ -1,5 +1,5 @@
 import React, {useContext} from "react";
-import AuthContext from './context/AuthContext'
+import GeneralContext from './context/GeneralContext'
 import { Route, Routes } from 'react-router-dom'
 import Home from './components/Home.js'
 import Login from './components/Login.js'
@@ -10,7 +10,7 @@ import VideoRoom from "./components/VRooms/VideoRoom.js"
 
 const App = () => {
  
-  const {loading} = useContext(AuthContext)
+  const {loading} = useContext(GeneralContext)
 
   return (
     <Routes>

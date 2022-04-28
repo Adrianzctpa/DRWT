@@ -1,12 +1,12 @@
 import React, {useContext, useEffect, useState} from "react";
-import AuthContext from "../../context/AuthContext"
+import GeneralContext from "../../context/GeneralContext"
 import Chat from "../utils/Chat.js"
 import Player from '../utils/Player.js'
 import styles from "../../../static/css/VideoRoom.module.css"
 
 const VideoRoom = () => {
 
-    const context = useContext(AuthContext)
+    const context = useContext(GeneralContext)
     const [loading, setLoading] = useState(true)
     const [info, setInfo] = useState(null)
 
@@ -79,7 +79,7 @@ const VideoRoom = () => {
                     <h1>Owner: {info.owner}</h1>
                     <h1>Guest Pause: {info.guest_pause_permission.toString()}</h1>
                     <Chat username={context.username} ac={context.tokens.access} uuid={info.uuid}/>
-                    <Player url={info.videopath}/>
+                    <Player uuid={info.uuid} url={info.videopath}/>
 
                     <button id="editbtn" onClick={handleEdit}>Edit</button>
 

@@ -1,10 +1,10 @@
 import React, { useContext } from 'react';
-import AuthContext from '../context/AuthContext';
+import GeneralContext from '../context/GeneralContext';
 import styles from "../../static/css/CreateVRoom.module.css"
 
 const Register = () => {
     
-    const {register} = useContext(AuthContext)
+    const {register} = useContext(GeneralContext)
 
     return (
         <>

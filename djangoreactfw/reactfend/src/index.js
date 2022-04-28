@@ -1,15 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom'
-import {AuthProvider} from "./context/AuthContext"
+import {GeneralProvider} from "./context/GeneralContext"
 import App from './App';
 
 ReactDOM.render(
     <React.StrictMode>
         <Router>    
-            <AuthProvider>
+            <GeneralProvider>
                 <App />
-            </AuthProvider>
+            </GeneralProvider>
         </Router>
     </React.StrictMode>,
     document.getElementById('root')

@@ -1,12 +1,12 @@
 import React, { useEffect, useContext, useState } from "react";
-import AuthContext from "../../context/AuthContext";
+import GeneralContext from "../../context/GeneralContext";
 import Pagination from "../utils/Pagination"
 import styles from "../../../static/css/SelectVRoom.module.css"
 import { Link, useNavigate } from "react-router-dom"
 
 const SelectVRoom = () => {
     const navigate = useNavigate()
-    const {vrooms, uvrooms} = useContext(AuthContext)
+    const {vrooms, uvrooms} = useContext(GeneralContext)
 
     const handleClick = () => {
         let VroomDiv = document.getElementById("Vrooms")

@@ -1,9 +1,9 @@
 import React, {useContext} from "react";
-import AuthContext from "../context/AuthContext"
+import GeneralContext from "../context/GeneralContext"
 import { Link } from "react-router-dom"
 
 const Login = () => {
-    const {loading, login, logout} = useContext(AuthContext)
+    const {loading, login, logout} = useContext(GeneralContext)
 
     return (
         <div>

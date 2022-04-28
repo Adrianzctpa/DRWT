@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import { useNavigate } from 'react-router-dom'
-import AuthContext from "../../context/AuthContext"
+import GeneralContext from "../../context/GeneralContext"
 import styles from "../../../static/css/CreateVRoom.module.css"
 
 const CreateVRoom = () => {
 
-    const {tokens} = useContext(AuthContext)
+    const {tokens} = useContext(GeneralContext)
     const navigate = useNavigate()
 
     const handleSubmit = async (e) => {

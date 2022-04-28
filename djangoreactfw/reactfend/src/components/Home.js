@@ -1,11 +1,11 @@
 import React, {useContext} from "react";
-import AuthContext from "../context/AuthContext";
+import GeneralContext from "../context/GeneralContext";
 import styles from "../../static/css/Home.module.css"
 import { Link } from "react-router-dom"
 
 const Home = () => {
     
-    const {loading, username} = useContext(AuthContext)
+    const {loading, username} = useContext(GeneralContext)
 
     return (
         <>

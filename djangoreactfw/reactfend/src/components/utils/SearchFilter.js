@@ -1,10 +1,10 @@
 import React, {useContext} from 'react';
-import AuthContext from "../../context/AuthContext"
+import GeneralContext from "../../context/GeneralContext"
 
 const SearchFilter = ({rooms, setRoomsRoute, 
                     loadVrooms, setPages, loadPages}) => {
     
-    const {tokens} = useContext(AuthContext)
+    const {tokens} = useContext(GeneralContext)
 
     let url;
     if (rooms.id === 'Vrooms') {

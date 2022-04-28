@@ -5,14 +5,19 @@ const Chat = ({uuid, username, ac}) => {
     useEffect(() => {
         if (uuid !== undefined) {    
             let url = `ws://${window.location.host}/ws/video/${uuid}`
-
             const ChatSocket = new WebSocket(url)
+            const btn = document.createElement('button')
+            btn.onclick = () => {
+                ChatSocket.close()
+            }
+            btn.textContent = 'leave'
 
             ChatSocket.onopen = () => {
                 console.log('connected')
+                document.getElementById('form').appendChild(btn)
             }
 
-            ChatSocket.ondisconnect = () => {
+            ChatSocket.onclose = () => {
                 console.log('disconnected')
             }
 
