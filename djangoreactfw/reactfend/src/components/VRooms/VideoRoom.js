@@ -78,8 +78,7 @@ const VideoRoom = () => {
                     <p>Title: {info.title}</p>
                     <h1>Owner: {info.owner}</h1>
                     <h1>Guest Pause: {info.guest_pause_permission.toString()}</h1>
-                    <Chat username={context.username} ac={context.tokens.access} uuid={info.uuid}/>
-                    <Player uuid={info.uuid} url={info.videopath}/>
+                    <Player owner={info.owner} uuid={info.uuid} url={info.videopath}/>
 
                     <button id="editbtn" onClick={handleEdit}>Edit</button>
 
