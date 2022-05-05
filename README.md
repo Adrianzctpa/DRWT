@@ -4,12 +4,14 @@ An Video Player made with Django and React! Sync with your friends and watch tog
 
 TODOS:
 
-- Video Synchronizing 
+- Guest pause implementation
+- Basic video things
 - Better CSS UI
 - More details
 
 Already done:
 
+- Video Synchronizing
 - Context API support
 - Chat
 - Dynamic search and pagination
