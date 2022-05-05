@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Chat = ({username, ac, socket}) => {
+const Chat = ({username, socket}) => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -8,7 +8,6 @@ const Chat = ({username, ac, socket}) => {
         socket.send(JSON.stringify({
             'message': message,
             'from': username,
-            'token': ac,
             'type': 'chat_message'
         }))
         form.reset()
