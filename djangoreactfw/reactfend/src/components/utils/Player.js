@@ -4,7 +4,7 @@ import GeneralContext from '../../context/GeneralContext';
 import Chat from './Chat'
 
 var player;
-const Player = ({url, uuid, owner}) => {
+const Player = ({url, uuid, owner, pause_perm}) => {
     
     const {username, tokens} = useContext(GeneralContext)
     const [WSocket, setWSocket] = useState('')
@@ -48,10 +48,10 @@ const Player = ({url, uuid, owner}) => {
                 onProgress={owner === username ? (progress) => SyncVideo(progress, VideoSocket) : (
                     undefined
                 )}
-                onPause={owner === username ? () => VideoState(VideoSocket, true) : (
+                onPause={owner === username || pause_perm ? () => VideoState(VideoSocket, true) : (
                     undefined
                 )}
-                onPlay={owner === username ? () => VideoState(VideoSocket, false) : (
+                onPlay={owner === username || pause_perm ? () => VideoState(VideoSocket, false) : (
                     undefined
                 )}
                 />
@@ -67,7 +67,11 @@ const Player = ({url, uuid, owner}) => {
         setWSocket(socket)
 
         socket.onopen = () => {
-            console.log('connected (video)')
+            socket.send(JSON.stringify({
+                'token': tokens.access,
+                'from': username,
+                'type': 'user_join'
+            }))
         }
 
         socket.onclose = () => {
@@ -85,25 +89,30 @@ const Player = ({url, uuid, owner}) => {
                 chat.appendChild(p)
             }
 
+            if (data.type === 'join') {
+                console.log(`${data.from} just joined!`)
+            }
+
+            if (data.type === 'state') {
+                
+                console.log(data, pause_perm)
+                if (data.state) {
+                    video.pause()
+                } else {
+                    video.play()
+                }   
+            }
+
             if (username === owner) return           
-                if (data.type === 'sync') {
+            
+            if (data.type === 'sync') {
 
-                    const current = Math.round(video.currentTime)
+                const current = Math.round(video.currentTime)
 
-                    if (Math.round(data.time) !== current) {
-                        video.currentTime = data.time
-                    }
+                if (Math.round(data.time) !== current) {
+                    video.currentTime = data.time
                 }
-
-                if (data.type === 'state') {
-                    
-                    if (data.state) {
-                        video.pause()
-                    } else {
-                        video.play()
-                    }   
-
-                }
+            }
         } 
 
         if (socketloading) {
