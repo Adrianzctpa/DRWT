@@ -7,6 +7,7 @@ var player;
 const Player = ({url, uuid, owner, pause_perm}) => {
     
     const {username, tokens} = useContext(GeneralContext)
+    const [users, setUsers] = useState('')
     const [WSocket, setWSocket] = useState('')
     const [mediainfo, setMediaInfo] = useState('')
     const [socketloading, setSocketLoading] = useState(true)
@@ -17,7 +18,6 @@ const Player = ({url, uuid, owner, pause_perm}) => {
         if (Math.round(seconds) !== 0) {
             socket.send(JSON.stringify({
                 'time': seconds,
-                'from': username,
                 'type': 'time_sync'
             }))
         }    
@@ -26,7 +26,6 @@ const Player = ({url, uuid, owner, pause_perm}) => {
     const VideoState = (socket, state) => {
         socket.send(JSON.stringify({
             'state': state,
-            'from': username,
             'type': 'video_state'
         }))
     }
@@ -91,11 +90,15 @@ const Player = ({url, uuid, owner, pause_perm}) => {
 
             if (data.type === 'join') {
                 console.log(`${data.from} just joined!`)
+                setUsers(data.users)
+            }
+
+            if (data.type === 'disconnect') {
+                console.log(`${data.from} saiu do grupo!`)
+                setUsers(data.users)
             }
 
             if (data.type === 'state') {
-                
-                console.log(data, pause_perm)
                 if (data.state) {
                     video.pause()
                 } else {
@@ -130,6 +133,9 @@ const Player = ({url, uuid, owner, pause_perm}) => {
         <div id="mediawrapper">
             { socketloading ? <p>Loading your media</p> : (
                 <>
+                    {users !== '' ? users.map(user => <div>{user.username}</div>) : (
+                        undefined
+                    )}
                     <Chat username={username} socket={WSocket}/>
                     {mediainfo.type === 'image' ? 
                         <img src={mediainfo.blob} width='500' height='300' /> : (

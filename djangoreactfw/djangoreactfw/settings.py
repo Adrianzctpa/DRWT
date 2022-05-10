@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'provisoryapi.apps.ProvisoryapiConfig',  
     'reactfend.apps.ReactfendConfig',
     'users.apps.UsersConfig',
+    'django_cleanup.apps.CleanupConfig',
 ]
 
 MIDDLEWARE = [

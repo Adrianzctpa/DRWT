@@ -1,4 +1,5 @@
 import json
+from socket import close
 import jwt 
 from djangoreactfw.settings import SIMPLE_JWT
 from provisoryapi.models import VideoRoom
@@ -13,7 +14,7 @@ def get_uuid_vroom(uuid):
 
 class VRoomConsumer(AsyncWebsocketConsumer):
 
-    user_model = get_user_model().objects.all()
+    users = []
 
     async def connect(self):  
         self.room_group_name = self.room_name = self.scope['url_route']['kwargs']['uuid']
@@ -21,7 +22,19 @@ class VRoomConsumer(AsyncWebsocketConsumer):
         await self.accept()
 
     async def disconnect(self, close_code):
-        pass
+        for user in self.users:
+            if user['uid'] == self.user_id:
+                self.users.remove(user)
+        
+        await self.channel_layer.group_send(self.room_group_name, {
+            'type': 'kill_connection',
+            'from': self.username,
+            'users': self.users
+        })
+
+        await (self.channel_layer.group_discard)(
+        self.room_group_name, self.channel_name)
+
 
     async def receive(self, text_data):
         data = json.loads(text_data)
@@ -33,17 +46,27 @@ class VRoomConsumer(AsyncWebsocketConsumer):
                 jwtauth.get_validated_token(data['token'])
             except:
                 self.close()
+
             decoded_token = jwt.decode(data['token'], SIMPLE_JWT['SIGNING_KEY'], algorithms=[SIMPLE_JWT['ALGORITHM']])
-            self.user_id = decoded_token['user_id']         
+            self.user_id = decoded_token['user_id']   
+            self.username = data['from']      
 
             result = await get_uuid_vroom(self.room_name)
             self.pause_perm = result[0][0]
             self.owner_id = result[0][1]
+            
+            self.users.append({
+                'username': self.username,
+                'uid': self.user_id
+            })
+
+            data['userlist'] = self.users
 
             await self.channel_layer.group_send(self.room_name,
             {
                 'type': 'user_join',
                 'from': data['from'],
+                'users': data['userlist']
             })
 
 
@@ -63,8 +86,7 @@ class VRoomConsumer(AsyncWebsocketConsumer):
                 await self.channel_layer.group_send(self.room_group_name,
                 {
                     'type': 'time_sync',
-                    'time': data['time'],
-                    'from': data['from'],
+                    'time': data['time']
                 })
 
         #Track state (paused, playing) from owner
@@ -76,7 +98,6 @@ class VRoomConsumer(AsyncWebsocketConsumer):
                 {
                     'type': 'video_state',
                     'state': data['state'],
-                    'from': data['from'],
                 })                     
 
     # Funcs based on the logic above
@@ -85,6 +106,7 @@ class VRoomConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({
             'type': 'join',
             'from': event['from'],
+            'users': event['users']
         }))
 
 
@@ -114,3 +136,11 @@ class VRoomConsumer(AsyncWebsocketConsumer):
             'state': state,
             'from': event['from'],
         }))   
+
+    async def kill_connection(self, event):
+
+        await self.send(text_data=json.dumps({
+            'type': 'disconnect',
+            'from': event['from'],
+            'users': event['users'],
+        }))
