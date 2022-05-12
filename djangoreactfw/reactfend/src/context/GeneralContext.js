@@ -33,6 +33,7 @@ export const GeneralProvider = ({children}) => {
         let data = await response.json()
         if (response.status === 200) {
             localStorage.setItem('tokens', JSON.stringify(data))
+            localStorage.setItem('firstlogin', true)
             setTokens(JSON.parse(localStorage.getItem('tokens')))
             navigate("/")
             window.location.reload(false)
@@ -45,6 +46,7 @@ export const GeneralProvider = ({children}) => {
         e.preventDefault()
         
         localStorage.removeItem("tokens")
+        localStorage.removeItem('firstlogin')
         setTokens(null)
         navigate("/login/")
         window.location.reload(false)

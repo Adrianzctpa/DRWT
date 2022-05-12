@@ -1,6 +1,7 @@
 import React, {useContext} from "react";
 import GeneralContext from './context/GeneralContext'
 import { Route, Routes } from 'react-router-dom'
+import Navbar from './components/Navbar.js'
 import Home from './components/Home.js'
 import Login from './components/Login.js'
 import Register from './components/Register.js'
@@ -13,22 +14,25 @@ const App = () => {
   const {loading} = useContext(GeneralContext)
 
   return (
-    <Routes>
-      {loading ? 
-        <>
-          <Route path='' element={<Home />} />
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
-        </> : (
-        <>
-          <Route path='' element={<Home />} />
-          <Route path="login" element={<Login />} />
-          <Route path="selectvroom/" element={<SelectVRoom />} />
-          <Route path="videoroom/:uuid/" element={<VideoRoom />} />
-          <Route path="createvroom" element={<CreateVRoom />} />
-        </>)  
-      }
-    </Routes>
+    <>
+      <Navbar log={loading}/>
+      <Routes>
+        {loading ? 
+          <>
+            <Route path='' element={<Home />} />
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
+          </> : (
+          <>
+            <Route path='' element={<Home />} />
+            <Route path="login" element={<Login />} />
+            <Route path="selectvroom/" element={<SelectVRoom />} />
+            <Route path="videoroom/:uuid/" element={<VideoRoom />} />
+            <Route path="createvroom" element={<CreateVRoom />} />
+          </>)  
+        }
+      </Routes>
+    </>  
   )
 }
 

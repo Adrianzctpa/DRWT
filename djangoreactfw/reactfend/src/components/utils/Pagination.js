@@ -81,7 +81,7 @@ const Pagination = ({rooms}) => {
                     </button>
                 </li>
             ))
-        }       
+        }
     }
 
     const [roomsRoute, setRoomsRoute] = useState(loadVrooms(rooms.results))
@@ -96,8 +96,14 @@ const Pagination = ({rooms}) => {
             <SearchFilter rooms={rooms} setRoomsRoute={setRoomsRoute}
             loadVrooms={loadVrooms} setPages={setPages}
             loadPages={loadPages} />
-            {roomsRoute}
-            {pages}
+            { roomsRoute.length > 0 ?
+                <>
+                    {roomsRoute}
+                    {pages}
+                </> : (
+                    <h1> No rooms! </h1>
+                )
+            }     
         </>    
     )
 }

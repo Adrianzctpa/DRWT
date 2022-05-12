@@ -1,4 +1,5 @@
 import React, {useContext, useEffect, useState} from "react";
+import {useNavigate, Link} from 'react-router-dom'
 import GeneralContext from "../../context/GeneralContext"
 import Player from '../utils/Player.js'
 import styles from "../../../static/css/VideoRoom.module.css"
@@ -8,6 +9,22 @@ const VideoRoom = () => {
     const context = useContext(GeneralContext)
     const [loading, setLoading] = useState(true)
     const [info, setInfo] = useState(null)
+    const navigate = useNavigate()
+
+    const handleDelete = async () => {
+        let response = await fetch(`/v1/vroomset/${info.uuid}/`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${context.tokens.access}`
+            }
+        })
+        let data = await response
+
+        if (response.status === 204) {
+            navigate('/selectvroom/')
+            window.location.reload(false)
+        }
+    }
 
     const handleEdit = () => {
         let form  = document.getElementById('editform')
@@ -42,7 +59,6 @@ const VideoRoom = () => {
         let data = await response.json()
 
         if (response.status === 200) {
-            console.log("Edited!")
             window.location.reload(false)
         } else {
             alert(data)
@@ -81,6 +97,14 @@ const VideoRoom = () => {
 
                     <button id="editbtn" onClick={handleEdit}>Edit</button>
 
+                    { info.owner === context.username ? 
+                        <button id="delbtn" onClick={handleDelete}>Delete</button> : (
+                            null
+                        )
+                    }
+
+                    <Link to='/selectvroom/'>Select other Vroom</Link>
+                    
                     <form id="editform" onSubmit={handleSubmit} className={styles.form}> 
                         <label>Title:</label>
                         <input type="text" name="title" />

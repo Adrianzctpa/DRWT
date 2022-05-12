@@ -8,6 +8,11 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from channels.generic.websocket import AsyncWebsocketConsumer
 from asgiref.sync import sync_to_async
 
+def remove_user(arr, uid):
+    for user in arr:
+        if user['uid'] == uid:
+            arr.remove(user)
+
 @sync_to_async
 def get_uuid_vroom(uuid):
     return list(VideoRoom.objects.filter(uuid=uuid).values_list('guest_pause_permission', 'owner'))
@@ -22,9 +27,7 @@ class VRoomConsumer(AsyncWebsocketConsumer):
         await self.accept()
 
     async def disconnect(self, close_code):
-        for user in self.users:
-            if user['uid'] == self.user_id:
-                self.users.remove(user)
+        remove_user(self.users, self.user_id)        
         
         await self.channel_layer.group_send(self.room_group_name, {
             'type': 'kill_connection',
@@ -54,6 +57,8 @@ class VRoomConsumer(AsyncWebsocketConsumer):
             result = await get_uuid_vroom(self.room_name)
             self.pause_perm = result[0][0]
             self.owner_id = result[0][1]
+
+            remove_user(self.users, self.user_id)        
             
             self.users.append({
                 'username': self.username,
