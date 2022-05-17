@@ -35,7 +35,6 @@ const SearchFilter = ({rooms, setRoomsRoute,
     return (
         <>
             <input onChange={handleChange} type="text" id="inputquery" placeholder="Search..."/>
-            <button>Search</button>
         </>
     )
 }

@@ -130,7 +130,6 @@ class VRoomConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({
             'type': 'sync',
             'time': time,
-            'from': event['from'],
         }))
 
     async def video_state(self, event):
@@ -139,7 +138,6 @@ class VRoomConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({
             'type': 'state',
             'state': state,
-            'from': event['from'],
         }))   
 
     async def kill_connection(self, event):

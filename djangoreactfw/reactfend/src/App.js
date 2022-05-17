@@ -11,13 +11,13 @@ import VideoRoom from "./components/VRooms/VideoRoom.js"
 
 const App = () => {
  
-  const {loading} = useContext(GeneralContext)
+  const {logstatus} = useContext(GeneralContext)
 
   return (
     <>
-      <Navbar log={loading}/>
+      <Navbar log={logstatus}/>
       <Routes>
-        {loading ? 
+        {!logstatus ? 
           <>
             <Route path='' element={<Home />} />
             <Route path="login" element={<Login />} />

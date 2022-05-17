@@ -6,35 +6,44 @@ import { Link } from "react-router-dom"
 
 const Home = () => {
     
-    const {loading, username} = useContext(GeneralContext)
+    const {logstatus, username} = useContext(GeneralContext)
 
     return (
-        <>
-            <h1>Home Page!</h1>
+        <div className={styles.container}>
+            <div className={styles.left}>
+                <div className={styles.top}>
+                    <h1>Watch videos, with people you care about.</h1>
+                    <img src="../../static/svg/play-button.svg" />         
+                </div>
+            </div>
 
-            {
-                loading ? 
-                    <>
-                        <Link className={styles.a}to="login">LOGIN</Link> 
-                    </> : (
+            <div className={styles.right}>   
+                <div className={styles.top}>
+                    <h1>A Watch Together web-app, made specially for you!</h1>
+                    {!logstatus ? 
                     <div>
-                        { localStorage.getItem('firstlogin') === 'true' ?
-                            <div className={`alert alert-success alert-dismissible fade show ${styles.center}`} role="alert">
-                                Hello {username}!
-                                <button onClick={() => localStorage.removeItem('firstlogin')} type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" />
-                            </div>
-                        : (null)}    
+                        <h5>To enjoy this web-app, you need to log in. </h5>
 
-                        <div>
-                            <h5>Hello {username}! Pogchamp!</h5>
-                            <Link className={styles.a}to="login">LOGOUT</Link>
-                            <Link className={styles.a}to="selectvroom">SelectVRoom</Link>
-                            <Link className={styles.a}to="createvroom">CreateVRoom</Link>
+                        <div className={styles.links}>
+                            <Link className={styles.a} to='login'><button style={{color: '#242428'}} type="button" class="btn btn-danger">Log in</button></Link>
+                        </div>      
+                    </div> : (
+                    <div>
+                        <h5>Hello again {username}!</h5> 
+                        <h5>Or is it the first time?</h5>
+                        <h5>
+                            Anyway, check the links below to start watching!
+                        </h5>
+                        
+                        <div className={styles.links}>
+                            <Link className={styles.a} to='selectvroom'><button style={{color: '#242428'}} type="button" class="btn btn-danger">Browse video rooms</button></Link>
+                            <Link className={styles.a} to='createvroom'><button style={{color: '#242428'}} type="button" class="btn btn-secondary">Create video room</button></Link>
                         </div>
                     </div>
-                )
-            } 
-        </>    
+                    )}
+                </div>  
+            </div>  
+        </div>    
     )
 }
 

@@ -3,11 +3,11 @@ import GeneralContext from "../context/GeneralContext"
 import { Link } from "react-router-dom"
 
 const Login = () => {
-    const {loading, login, logout} = useContext(GeneralContext)
+    const {logstatus, login, logout} = useContext(GeneralContext)
 
     return (
         <div>
-            { loading ?
+            { !logstatus ?
                 <>
                     <h1>Login</h1>
                     <form onSubmit={login}>

@@ -8,6 +8,7 @@ export default GeneralContext;
 
 export const GeneralProvider = ({children}) => {
     const [username, setUsername] = useState(null) 
+    const [logstatus, setLogStatus] = useState(false)
     const [tokens, setTokens] = useState(() => localStorage.getItem('tokens') ? JSON.parse(localStorage.getItem('tokens')) : null)
     const [vrooms, setVrooms] = useState([])
     const [uservrooms, setUserVrooms] = useState([])
@@ -33,10 +34,9 @@ export const GeneralProvider = ({children}) => {
         let data = await response.json()
         if (response.status === 200) {
             localStorage.setItem('tokens', JSON.stringify(data))
-            localStorage.setItem('firstlogin', true)
             setTokens(JSON.parse(localStorage.getItem('tokens')))
+            setLogStatus(true)
             navigate("/")
-            window.location.reload(false)
         } else {
             alert("No account found with given credentials")
         }       
@@ -46,10 +46,9 @@ export const GeneralProvider = ({children}) => {
         e.preventDefault()
         
         localStorage.removeItem("tokens")
-        localStorage.removeItem('firstlogin')
         setTokens(null)
-        navigate("/login/")
-        window.location.reload(false)
+        setLogStatus(false)
+        navigate("/")
     }
 
     const RegisterUser = async (e) => {
@@ -87,11 +86,12 @@ export const GeneralProvider = ({children}) => {
         let data = await response.json()
         
         if (response.status === 200) {
-          setUsername(data.results[0].username)
-          setUid(jwt_decode(tokens.access).user_id)
-          GetVRooms()
+            setLogStatus(true)
+            setUsername(data.results[0].username)
+            setUid(jwt_decode(tokens.access).user_id)
+            GetVRooms()
         } else {
-          UpdateToken()
+            UpdateToken()
         }
     }
 
@@ -163,6 +163,7 @@ export const GeneralProvider = ({children}) => {
         uid: uid,
         vrooms: vrooms,
         uvrooms: uservrooms,
+        logstatus: logstatus,
         login: LogIn,
         logout: LogOut,
         register: RegisterUser,
@@ -176,7 +177,7 @@ export const GeneralProvider = ({children}) => {
 
     return (
         <GeneralContext.Provider value={context}>
-            { children }
+            {children}
         </GeneralContext.Provider>
     )
 }

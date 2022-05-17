@@ -3,13 +3,13 @@ import { Link } from "react-router-dom"
 import '../../static/css/bootstrap.min.css'
 
 const Navbar = ({log}) => {
-    
+
     return (
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class='container-fluid'>
                 <Link class="navbar-brand" to='/'>Provisory Name</Link>
                 
-                {!log ? 
+                {log ? 
                     <>                       
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                             <span class="navbar-toggler-icon"></span>
@@ -26,6 +26,8 @@ const Navbar = ({log}) => {
                                 <li class="nav-item">
                                     <Link class='nav-link' to='/createvroom/'>Create video room</Link>
                                 </li>
+                            </ul>
+                            <ul class="navbar-nav ms-auto">
                                 <li class="nav-item">
                                     <Link class='nav-link' to='/login/'>Logout</Link>
                                 </li>
