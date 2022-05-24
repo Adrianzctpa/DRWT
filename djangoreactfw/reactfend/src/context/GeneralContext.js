@@ -35,7 +35,9 @@ export const GeneralProvider = ({children}) => {
         if (response.status === 200) {
             localStorage.setItem('tokens', JSON.stringify(data))
             setTokens(JSON.parse(localStorage.getItem('tokens')))
+
             setLogStatus(true)
+            getUsername()
             navigate("/")
         } else {
             alert("No account found with given credentials")
@@ -76,11 +78,12 @@ export const GeneralProvider = ({children}) => {
     }
 
     const getUsername = async () => {
+        const ac = JSON.parse(localStorage.getItem("tokens"))?.access
         let response = await fetch("/v1/users/", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${tokens?.access}`
+            "Authorization": `Bearer ${ac}`
           }
         })
         let data = await response.json()
@@ -88,8 +91,9 @@ export const GeneralProvider = ({children}) => {
         if (response.status === 200) {
             setLogStatus(true)
             setUsername(data.results[0].username)
-            setUid(jwt_decode(tokens.access).user_id)
-            GetVRooms()
+            setUid(jwt_decode(ac).user_id)
+
+            GetVRooms(ac)
         } else {
             UpdateToken()
         }
@@ -102,7 +106,7 @@ export const GeneralProvider = ({children}) => {
             "Content-Type": "application/json",
             },
             body: JSON.stringify({
-            'refresh': tokens?.refresh
+            'refresh': JSON.parse(localStorage.getItem('tokens'))?.refresh
             })
         })
         let data = await response.json()
@@ -110,8 +114,8 @@ export const GeneralProvider = ({children}) => {
         if (response.status === 200) {
             localStorage.setItem('tokens', JSON.stringify(data))
             setTokens(JSON.parse(localStorage.getItem('tokens')))
+            
             getUsername()
-            window.location.reload(false)
         } else {
             localStorage.removeItem("tokens")
             setTokens(null)
@@ -119,12 +123,12 @@ export const GeneralProvider = ({children}) => {
         }
     }
     
-    const GetVRooms = async () => {
+    const GetVRooms = async (ac) => {
         let response = await fetch("/v1/getvrooms/", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${tokens?.access}`
+                "Authorization": `Bearer ${ac}`
             }
         })
         let data = await response.json()
@@ -132,16 +136,16 @@ export const GeneralProvider = ({children}) => {
         if (response.status === 200) {
             data.id = 'Vrooms'
             setVrooms(data)
-            getUserVrooms()
+            getUserVrooms(ac)
         }
     }
 
-    const getUserVrooms = async () => {
+    const getUserVrooms = async (ac) => {
         let response = await fetch("/v1/vroomset/", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${tokens?.access}`
+                "Authorization": `Bearer ${ac}`
             }
         })
         let data = await response.json()

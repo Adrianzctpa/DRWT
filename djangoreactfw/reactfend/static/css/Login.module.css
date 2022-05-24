@@ -1,0 +1,10 @@
+.bg_color_strongred {
+    background-color: #C70039;
+    height: 100vh;
+    width: 100vw;
+    overflow: auto;
+}
+
+.bg_color_lightblack {
+    background-color: #39393E;
+}
