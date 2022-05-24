@@ -94,8 +94,14 @@ export const GeneralProvider = ({children}) => {
             setUid(jwt_decode(ac).user_id)
 
             GetVRooms(ac)
+            getUserVrooms(ac)
         } else {
             UpdateToken()
+        }
+
+
+        if (loading) {
+            setLoading(false)
         }
     }
 
@@ -136,7 +142,6 @@ export const GeneralProvider = ({children}) => {
         if (response.status === 200) {
             data.id = 'Vrooms'
             setVrooms(data)
-            getUserVrooms(ac)
         }
     }
 
@@ -153,10 +158,6 @@ export const GeneralProvider = ({children}) => {
         if (response.status === 200) {
             data.id = 'UVrooms'
             setUserVrooms(data)
-        }
-
-        if (loading) {
-            setLoading(false)
         }
     }
 

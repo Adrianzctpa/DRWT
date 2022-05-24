@@ -1,6 +1,9 @@
-import React from 'react';
+import React, {useContext} from 'react';
+import GeneralContext from '../../context/GeneralContext'
 
-const Chat = ({username, socket}) => {
+const Chat = ({socket}) => {
+
+    const {username} = useContext(GeneralContext)
 
     const handleSubmit = (e) => {
         e.preventDefault()

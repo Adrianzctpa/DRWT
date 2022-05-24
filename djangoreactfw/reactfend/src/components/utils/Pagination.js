@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 const Pagination = ({rooms}) => {
     const navigate = useNavigate()
     const {tokens} = useContext(GeneralContext)
+    const ROOMS_PER_PAGE = 10
 
     let url;
     if (rooms.id === 'Vrooms') {
@@ -50,7 +51,7 @@ const Pagination = ({rooms}) => {
                     tokenFetch(`${url}?limit=10&title=${inputQuery}`)
                     break;
                 default: 
-                    tokenFetch(`${url}?limit=10&offset=${number * 10 - 10}&title=${inputQuery}`)    
+                    tokenFetch(`${url}?limit=10&offset=${number * ROOMS_PER_PAGE - ROOMS_PER_PAGE}&title=${inputQuery}`)    
             }
         } else {
             switch (number) {
@@ -58,7 +59,7 @@ const Pagination = ({rooms}) => {
                     tokenFetch(`${url}?limit=10`)
                     break;           
                 default:
-                    tokenFetch(`${url}?limit=10&offset=${number * 10 - 10}`)
+                    tokenFetch(`${url}?limit=10&offset=${number * ROOMS_PER_PAGE - ROOMS_PER_PAGE}`)
             }
         }
     }
