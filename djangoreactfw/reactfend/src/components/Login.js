@@ -1,6 +1,6 @@
 import React, {useContext} from "react";
-import CVRstyles from '../../static/css/CreateVRoom.module.css' 
-import styles from '../../static/css/Login.module.css' 
+import formStyles from '../../static/css/Form.module.css' 
+import styles from '../../static/css/Backgrounds.module.css' 
 import GeneralContext from "../context/GeneralContext"
 import { Link } from "react-router-dom"
 
@@ -10,7 +10,7 @@ const Login = () => {
     return (
         <div className={styles.bg_color_strongred}>
             { !logstatus ?
-                <div className={`${CVRstyles.form} ${styles.bg_color_lightblack}`}>
+                <div className={`${formStyles.form} ${styles.bg_color_lightblack}`}>
                     <h1>Login</h1>
                     <form onSubmit={login}>
 
@@ -30,9 +30,9 @@ const Login = () => {
                     <Link to='/register'>Don't have an account?</Link>
                     <Link to="/">GO BACK</Link>
                 </div> : (
-                <div className={`${CVRstyles.form} ${styles.bg_color_lightblack}`}>
+                <div className={`${formStyles.form} ${styles.bg_color_lightblack}`}>
                     <h1>Logout</h1>
-                    <button onClick={logout}>Logout</button>
+                    <button class='btn btn-danger' style={{width: 'fit-content', padding: '10px'}} onClick={logout}>Logout</button>
                     <Link to="/">GO BACK</Link>
                 </div>
                 )

@@ -11,27 +11,35 @@ import VideoRoom from "./components/VRooms/VideoRoom.js"
 
 const App = () => {
  
-  const {logstatus} = useContext(GeneralContext)
+  const {logstatus, loading, vrooms, uvrooms} = useContext(GeneralContext)
 
   return (
     <>
-      <Navbar log={logstatus}/>
-      <Routes>
-        {!logstatus ? 
+      {!loading ?
           <>
-            <Route path='' element={<Home />} />
-            <Route path="login" element={<Login />} />
-            <Route path="register" element={<Register />} />
+            <Navbar log={logstatus}/>
+            <Routes>
+              {!logstatus ? 
+                <>
+                  <Route path='' element={<Home />} />
+                  <Route path="login/" element={<Login />} />
+                  <Route path="register/" element={<Register />} />
+                </> : (
+                <>
+                  <Route path='' element={<Home />} />
+                  <Route path="login/" element={<Login />} />
+                  <Route path="selectvroom/" element={<SelectVRoom />} />
+                  <Route path="videoroom/:uuid/" element={<VideoRoom />} />
+                  <Route path="createvroom" element={<CreateVRoom />} />
+                </>)  
+              }
+            </Routes>
           </> : (
-          <>
-            <Route path='' element={<Home />} />
-            <Route path="login" element={<Login />} />
-            <Route path="selectvroom/" element={<SelectVRoom />} />
-            <Route path="videoroom/:uuid/" element={<VideoRoom />} />
-            <Route path="createvroom" element={<CreateVRoom />} />
-          </>)  
-        }
-      </Routes>
+            <>
+              <p>Loading your content....</p>
+            </>
+          )
+      }
     </>  
   )
 }

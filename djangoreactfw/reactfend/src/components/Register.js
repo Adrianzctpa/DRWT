@@ -1,29 +1,42 @@
 import React, { useContext } from 'react';
 import GeneralContext from '../context/GeneralContext';
-import styles from "../../static/css/CreateVRoom.module.css"
+import formStyles from '../../static/css/Form.module.css' 
+import styles from '../../static/css/Backgrounds.module.css'
 
 const Register = () => {
     
     const {register} = useContext(GeneralContext)
 
     return (
-        <>
-            <form onSubmit={register} className={styles.form}>
-                <label>username</label>
-                <input type="username" name="username" />
+        <div className={styles.bg_color_strongred}>
+            <div className={`${formStyles.form} ${styles.bg_color_lightblack}`}>
+                <h1>Register</h1>
+                <form onSubmit={register}>
 
-                <label>name</label>
-                <input type="username" name="name" />
+                    <div class="mb-3">
+                        <label class="form-label">Username</label>
+                        <input type="username" class="form-control" id="username" />
+                    </div>
 
-                <label>email</label>
-                <input type="email" name="email" />
+                    <div class="mb-3">
+                        <label class="form-label">Name</label>
+                        <input type="name" class="form-control" id="name" />
+                    </div>
 
-                <label>password</label>
-                <input type="password" name="password" />
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" />
+                    </div>
 
-                <button type="submit">Register</button>
-            </form>
-        </>
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" />
+                    </div>
+
+                    <button type="submit" class='btn btn-primary'>Register</button>
+                </form>
+            </div>            
+        </div>      
     )
 }
 

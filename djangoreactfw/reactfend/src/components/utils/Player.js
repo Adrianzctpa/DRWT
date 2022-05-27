@@ -54,11 +54,8 @@ const Player = ({url, uuid, owner, pause_perm}) => {
                     undefined
                 )}
                 />
-
-                VideoSignal(VideoSocket)
-            } else {
-                VideoSignal(VideoSocket)
-            }
+            } 
+            VideoSignal(VideoSocket)
         })
     }
 
@@ -138,7 +135,7 @@ const Player = ({url, uuid, owner, pause_perm}) => {
                     )}
                     <Chat username={username} socket={WSocket}/>
                     {mediainfo.type === 'image' ? 
-                        <img src={mediainfo.blob} width='500' height='300' /> : (
+                        <img src={mediainfo.blob} style={{width: 500, height: 500}} /> : (
                         <>
                             {player}
                         </>

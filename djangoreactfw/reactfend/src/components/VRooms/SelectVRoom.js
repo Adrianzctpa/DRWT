@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useContext } from "react";
 import GeneralContext from "../../context/GeneralContext";
 import Pagination from "../utils/Pagination"
 import styles from "../../../static/css/SelectVRoom.module.css"
@@ -6,7 +6,10 @@ import { Link, useNavigate } from "react-router-dom"
 
 const SelectVRoom = () => {
     const navigate = useNavigate()
-    const {loading, vrooms, uvrooms} = useContext(GeneralContext)
+    const {vrooms, uvrooms} = useContext(GeneralContext)
+    
+    if (vrooms.length === 0 || uvrooms.length === 0) return null
+
     const handleClick = () => {
         let VroomDiv = document.getElementById("Vrooms")
         let UVroomDiv = document.getElementById("UVrooms")
@@ -31,7 +34,6 @@ const SelectVRoom = () => {
                 <button onClick={() => navigate('/createvroom')}>Create</button>
                 <Link to="/">GO BACK</Link>
                 <div id="RoomsDiv" className={styles.RoomsDiv}>
-                    {!loading ? 
                     <>
                         <div id='UVrooms'>
                             <Pagination rooms={uvrooms} />
@@ -40,7 +42,7 @@ const SelectVRoom = () => {
                         <div id='Vrooms' style={{ display: 'none' }}>
                             <Pagination rooms={vrooms}/>
                         </div>
-                    </> : (<h1>Loading rooms...</h1>)}
+                    </>
                 </div>
             </div>
         </>   

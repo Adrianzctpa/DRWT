@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useState} from "react";
 import {useNavigate, Link} from 'react-router-dom'
 import GeneralContext from "../../context/GeneralContext"
 import Player from '../utils/Player.js'
+import CreateVRoom from './CreateVRoom.js'
 import styles from "../../../static/css/VideoRoom.module.css"
 
 const VideoRoom = () => {
@@ -30,11 +31,11 @@ const VideoRoom = () => {
         let form  = document.getElementById('editform')
         let btn = document.getElementById('editbtn')
         
-        if (form.style.display === '') {
+        if (form.style.display === 'none') {
             form.style.display = 'flex'
             btn.textContent = 'Close'
         } else {
-            form.style.display = ''
+            form.style.display = 'none'
             btn.textContent = 'Edit'
         }
     }
@@ -104,21 +105,8 @@ const VideoRoom = () => {
                     }
 
                     <Link to='/selectvroom/'>Select other Vroom</Link>
-                    
-                    <form id="editform" onSubmit={handleSubmit} className={styles.form}> 
-                        <label>Title:</label>
-                        <input type="text" name="title" />
-
-                        <label>Can guest pause video?</label>
-                        <input type="checkbox" name="pause_perm" />
-
-                        <label>Select a video to share:</label>
-                        <input id="file"  type="file" name="vpath" 
-                        accept="image/png, image/jpeg, image/jpg,
-                        image/webp, video/mp4, video/x-m4v" />
-
-                        <button type="submit">Edit</button>
-                    </form>  
+ 
+                    <CreateVRoom mode={"edit"} patchSubmit={handleSubmit}/>
                 </div>
             )}
         </>

@@ -7,6 +7,7 @@ const GeneralContext = createContext()
 export default GeneralContext;
 
 export const GeneralProvider = ({children}) => {
+    
     const [username, setUsername] = useState(null) 
     const [logstatus, setLogStatus] = useState(false)
     const [tokens, setTokens] = useState(() => localStorage.getItem('tokens') ? JSON.parse(localStorage.getItem('tokens')) : null)
@@ -14,6 +15,7 @@ export const GeneralProvider = ({children}) => {
     const [uservrooms, setUserVrooms] = useState([])
     const [uid, setUid] = useState(null)
     const [loading, setLoading] = useState(true)
+    const [prop, setProp] = useState('')
 
     const navigate = useNavigate()
 
@@ -98,7 +100,6 @@ export const GeneralProvider = ({children}) => {
         } else {
             UpdateToken()
         }
-
 
         if (loading) {
             setLoading(false)
