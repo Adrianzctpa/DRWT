@@ -5,7 +5,7 @@ import '../../static/css/bootstrap.min.css'
 const Navbar = ({log}) => {
 
     return (
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
             <div class='container-fluid'>
                 <Link class="navbar-brand" to='/'>Provisory Name</Link>
                 

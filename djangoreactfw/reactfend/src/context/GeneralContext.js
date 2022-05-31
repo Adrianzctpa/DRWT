@@ -173,6 +173,7 @@ export const GeneralProvider = ({children}) => {
         login: LogIn,
         logout: LogOut,
         register: RegisterUser,
+        refreshContent: getUsername,
     } 
 
     useEffect(() => {

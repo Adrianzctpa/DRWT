@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import GeneralContext from "../../context/GeneralContext";
 import Pagination from "../utils/Pagination"
+import BGStyles from '../../../static/css/Backgrounds.module.css'
 import styles from "../../../static/css/SelectVRoom.module.css"
 import { Link, useNavigate } from "react-router-dom"
 
@@ -27,25 +28,23 @@ const SelectVRoom = () => {
     }
     
     return (   
-        <>
-            <div>    
-                <h1>Click in a Video Room</h1>
-                <button onClick={handleClick} id="vroombtn">All Video Rooms</button>
-                <button onClick={() => navigate('/createvroom')}>Create</button>
-                <Link to="/">GO BACK</Link>
-                <div id="RoomsDiv" className={styles.RoomsDiv}>
-                    <>
-                        <div id='UVrooms'>
-                            <Pagination rooms={uvrooms} />
-                        </div>
-                    
-                        <div id='Vrooms' style={{ display: 'none' }}>
-                            <Pagination rooms={vrooms}/>
-                        </div>
-                    </>
+        <div className={`${BGStyles.bg_color_strongred} ${styles.container}`}>    
+            
+            <h1>Click in a Video Room</h1>
+            <button onClick={handleClick} id="vroombtn" class="btn btn-primary">All Video Rooms</button>
+            <button onClick={() => navigate('/createvroom')} class="btn btn-primary">Create</button>
+            <Link to="/">GO BACK</Link>
+            
+            <div id="RoomsDiv" className={`${styles.RoomsDiv} ${BGStyles.bg_color_lightblack}`}>
+                <div id='UVrooms' className={styles.RoomsContainer}>
+                    <Pagination rooms={uvrooms} />
+                </div>
+            
+                <div id='Vrooms' className={styles.RoomsContainer} style={{ display: 'none' }}>
+                    <Pagination rooms={vrooms}/>
                 </div>
             </div>
-        </>   
+        </div>  
     )
 }
 

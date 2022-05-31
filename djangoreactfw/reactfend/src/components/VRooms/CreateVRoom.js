@@ -6,7 +6,7 @@ import formStyles from "../../../static/css/Form.module.css"
 
 const CreateVRoom = ( {mode, patchSubmit} ) => {
 
-    const {tokens} = useContext(GeneralContext)
+    const {tokens, refreshContent} = useContext(GeneralContext)
     const navigate = useNavigate()
 
     const handleSubmit = async (e) => {
@@ -27,6 +27,7 @@ const CreateVRoom = ( {mode, patchSubmit} ) => {
         let data = await response.json()
         
         if (response.status === 200) {
+            refreshContent()
             navigate(`/videoroom/${data.resp.uuid}/`)
         }
         
@@ -57,26 +58,26 @@ const CreateVRoom = ( {mode, patchSubmit} ) => {
                     </form>
                 </div>
             </div> : (
-                <div id="editform" className={`${formStyles.form} ${styles.bg_color_lightblack}`} style={{display: 'none', marginBottom: '50px'}}>
-                    <form onSubmit={patchSubmit}>
-                        <div class="mb-3">
-                            <label class="form-label">Title:</label>
-                            <input type="text" class="form-control" name="title" />
-                        </div>
+            <div id="editform" className={`${formStyles.form} ${styles.bg_color_lightblack}`} style={{display: 'none', marginBottom: '50px'}}>
+                <form onSubmit={patchSubmit}>
+                    <div class="mb-3">
+                        <label class="form-label">Title:</label>
+                        <input type="text" class="form-control" name="title" />
+                    </div>
 
-                        <div class="mb-3 form-check">
-                            <input type="checkbox" name='pause_perm' class="form-check-input"/>
-                            <label class="form-check-label">Permission for guests to pause</label>
-                        </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" name='pause_perm' class="form-check-input"/>
+                        <label class="form-check-label">Permission for guests to pause</label>
+                    </div>
 
-                        <div class="mb-3">
-                            <label for="formFile" class="form-label">Select a video or image to share:</label>
-                            <input class="form-control" type="file" name='vpath' accept="image/png, image/jpeg, image/jpg, image/webp, video/mp4, video/x-m4v" />
-                        </div>
+                    <div class="mb-3">
+                        <label for="formFile" class="form-label">Select a video or image to share:</label>
+                        <input class="form-control" type="file" name='vpath' accept="image/png, image/jpeg, image/jpg, image/webp, video/mp4, video/x-m4v" />
+                    </div>
 
-                        <button type="submit" class='btn btn-primary'>Edit</button>
-                    </form>
-                </div>
+                    <button type="submit" class='btn btn-primary'>Edit</button>
+                </form>
+            </div>
             )
             }
         </>  

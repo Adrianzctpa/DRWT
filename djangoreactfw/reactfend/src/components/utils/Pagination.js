@@ -1,4 +1,5 @@
 import React, {useState, useContext, useEffect} from 'react';
+import { Link } from 'react-router-dom'
 import GeneralContext from "../../context/GeneralContext"
 import SearchFilter from "./SearchFilter"
 import styles from "../../../static/css/SelectVRoom.module.css"
@@ -32,10 +33,15 @@ const Pagination = ({rooms}) => {
 
     const loadVrooms = (arr) => {
         return arr.map(vroom => (
-            <div onClick={() => navigate(`/videoroom/${vroom.uuid}/`)} key={vroom} className={styles.Room}>
-                <p>{vroom.title}</p>
-                <h5>{`Guest Pause: ${vroom.guest_pause_permission}`}</h5>
-                <h5>{`Video Path: ${vroom.videopath}`}</h5>
+            <div key={vroom} className={`card ${styles.spacing}`}>
+                <div class="card-header">
+                    {vroom.title}
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{`Owner: ${vroom.owner}`}</h5>
+                    <p class="card-text">{`Guest can pause: ${vroom.guest_pause_permission}`}</p>
+                    <Link to={`/videoroom/${vroom.uuid}`}><a class="btn btn-primary">Watch together</a></Link>
+                </div>
             </div>
         ))
     }
@@ -100,11 +106,13 @@ const Pagination = ({rooms}) => {
             { roomsRoute.length > 0 ?
                 <>
                     {roomsRoute}
-                    {pages}
+                    <div className={styles.pageDiv}>
+                        {pages}
+                    </div>
                 </> : (
                     <h1> No rooms! </h1>
                 )
-            }     
+            }
         </>    
     )
 }
