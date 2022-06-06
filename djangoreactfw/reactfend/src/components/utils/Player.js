@@ -2,6 +2,7 @@ import React, {useEffect, useState, useContext} from 'react';
 import ReactPlayer from 'react-player';
 import GeneralContext from '../../context/GeneralContext';
 import Chat from './Chat'
+import styles from '../../../static/css/VideoRoom.module.css'
 
 var player;
 const Player = ({url, uuid, owner, pause_perm}) => {
@@ -80,9 +81,13 @@ const Player = ({url, uuid, owner, pause_perm}) => {
 
             if (data.type === 'chat') {
                 let chat = document.getElementById('chat')
+                let chatCon = document.getElementById('chat-container')
                 let p = document.createElement('p')
+
                 p.textContent = `${data.from}: ${data.message}`
+
                 chat.appendChild(p)
+                chatCon.scrollTop = chatCon.scrollHeight
             }
 
             if (data.type === 'join') {
@@ -127,19 +132,17 @@ const Player = ({url, uuid, owner, pause_perm}) => {
     }, [])
 
     return (
-        <div id="mediawrapper">
+        <div className={styles.center_row} id="mediawrapper">
             { socketloading ? <p>Loading your media</p> : (
                 <>
-                    {users !== '' ? users.map(user => <div>{user.username}</div>) : (
-                        undefined
-                    )}
-                    <Chat username={username} socket={WSocket}/>
                     {mediainfo.type === 'image' ? 
-                        <img src={mediainfo.blob} style={{width: 500, height: 500}} /> : (
+                        <img src={mediainfo.blob} style={{width: '500px',height: '500px'}} /> 
+                        : (
                         <>
                             {player}
                         </>
                     )}
+                    <Chat username={username} socket={WSocket}/>
                 </>)
             }    
         </div>

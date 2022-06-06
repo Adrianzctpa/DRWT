@@ -31,8 +31,8 @@ const SelectVRoom = () => {
         <div className={`${BGStyles.bg_color_strongred} ${styles.container}`}>    
             
             <h1>Click in a Video Room</h1>
-            <button onClick={handleClick} id="vroombtn" class="btn btn-primary">All Video Rooms</button>
-            <button onClick={() => navigate('/createvroom')} class="btn btn-primary">Create</button>
+            <button onClick={handleClick} id="vroombtn" className={`btn btn-primary ${styles.spacing}`}>All Video Rooms</button>
+            <button onClick={() => navigate('/createvroom')} className={`btn btn-primary ${styles.spacing}`}>Create</button>
             <Link to="/">GO BACK</Link>
             
             <div id="RoomsDiv" className={`${styles.RoomsDiv} ${BGStyles.bg_color_lightblack}`}>

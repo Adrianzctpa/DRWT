@@ -4,6 +4,7 @@ import GeneralContext from "../../context/GeneralContext"
 import Player from '../utils/Player.js'
 import CreateVRoom from './CreateVRoom.js'
 import styles from "../../../static/css/VideoRoom.module.css"
+import BGStyles from '../../../static/css/Backgrounds.module.css'
 
 const VideoRoom = () => {
 
@@ -13,6 +14,8 @@ const VideoRoom = () => {
     const navigate = useNavigate()
 
     const handleDelete = async () => {
+        if (!confirm("Are you sure you want to delete this videoroom?")) return
+
         let response = await fetch(`/v1/vroomset/${info.uuid}/`, {
             method: 'DELETE',
             headers: {
@@ -90,10 +93,13 @@ const VideoRoom = () => {
     return (
         <>
             { loading ? <h1>404 - Room not found</h1> : (
-                <div> 
-                    <p>Title: {info.title}</p>
-                    <h1>Owner: {info.owner}</h1>
-                    <h1>Guest Pause: {info.guest_pause_permission.toString()}</h1>
+                <div className={`${BGStyles.bg_color_strongred} ${styles.flex}`}> 
+                    <div className={styles.center_stack}>
+                        <h1>{info.title}</h1>
+                        <h1>Owner: {info.owner}</h1>
+                        <h1>Guest Pause: {info.guest_pause_permission.toString()}</h1>
+                    </div>
+
                     <Player pause_perm={info.guest_pause_permission} owner={info.owner} uuid={info.uuid} url={info.videopath}/>
 
                     <button id="editbtn" onClick={handleEdit}>Edit</button>

@@ -1,5 +1,7 @@
 import React, {useContext} from 'react';
 import GeneralContext from '../../context/GeneralContext'
+import styles from "../../../static/css/VideoRoom.module.css"
+import BGStyles from '../../../static/css/Backgrounds.module.css'
 
 const Chat = ({socket}) => {
 
@@ -8,6 +10,9 @@ const Chat = ({socket}) => {
     const handleSubmit = (e) => {
         e.preventDefault()
         const message = e.target.message.value 
+        
+        if (message === '') return
+
         socket.send(JSON.stringify({
             'message': message,
             'from': username,
@@ -17,15 +22,15 @@ const Chat = ({socket}) => {
     }
 
     return (
-        <>    
-            <div id='chat' />
-
+        <div className={`${BGStyles.bg_color_lightblack} ${styles.container}`}>
+            <div id='chat-container' className={`${BGStyles.bg_color_white} ${styles.chat}`}>    
+                <div id='chat' />
+            </div>
             <form onSubmit={handleSubmit} id="form" >
                 <input type="text" name="message"></input>
-                <button type="submit">SEND</button>
-                <button onClick={() => socket.close()}>Leave</button>
+                <button class="btn btn-primary" type="submit">SEND</button>
             </form>
-        </>    
+        </div>    
     )
 }
 

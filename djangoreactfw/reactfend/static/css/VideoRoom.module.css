@@ -1,11 +1,34 @@
-.form {
-    display: none;
+.flex {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.center_stack {
+    display: flex;
     flex-direction: column;
 }
 
-.form > * {
-    margin-top: 20px;
-    margin-left: auto;
-    margin-right: auto;
-    width: fit-content;
+.center_row {
+    display: flex;
+    flex-direction: row;
+    gap: 10%;
+}
+
+.container {
+    width: 500px;
+    margin: 0 auto;
+    border-radius: 5px;
+    overflow: hidden;
+    align-self: flex-end;
+    padding: 20px;
+}
+
+.chat {
+    height: 400px;
+    overflow-y: auto;
+    word-wrap: break-word;
+    direction: ltr;
+    border-radius:5px;
+    padding: 20px;
 }

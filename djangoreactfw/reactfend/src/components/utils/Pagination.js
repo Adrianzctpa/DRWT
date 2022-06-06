@@ -110,7 +110,7 @@ const Pagination = ({rooms}) => {
                         {pages}
                     </div>
                 </> : (
-                    <h1> No rooms! </h1>
+                    <h1 className={styles.spacing}> No rooms! </h1>
                 )
             }
         </>    

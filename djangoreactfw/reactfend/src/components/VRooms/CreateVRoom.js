@@ -17,6 +17,10 @@ const CreateVRoom = ( {mode, patchSubmit} ) => {
         formData.append("guest_pause_permission", e.target.pause_perm.checked)
         formData.append("videopath", e.target.vpath.files[0])
 
+        if (Object.fromEntries(formData)['videopath'] === 'undefined') {
+            return alert('You need to upload a video/image.')
+        }
+
         let response = await fetch("/v1/vroomset/", {
             method: "POST",
             headers: {
@@ -29,8 +33,7 @@ const CreateVRoom = ( {mode, patchSubmit} ) => {
         if (response.status === 200) {
             refreshContent()
             navigate(`/videoroom/${data.resp.uuid}/`)
-        }
-        
+        }  
     }
 
     return (

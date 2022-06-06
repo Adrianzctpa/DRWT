@@ -25,17 +25,13 @@ const SearchFilter = ({rooms, setRoomsRoute,
         let data = await response.json()
 
         if (response.status === 200) {
-            if (data.results.length > 0) {
-                setRoomsRoute(loadVrooms(data.results))
-                setPages(loadPages(data))
-            }
+            setRoomsRoute(loadVrooms(data.results))
+            setPages(loadPages(data))
         }
     }
     
     return (
-        <>
-            <input onChange={handleChange} type="text" id="inputquery" placeholder="Search..."/>
-        </>
+        <input onChange={handleChange} type="text" id="inputquery" placeholder="Search..."/>
     )
 }
 
