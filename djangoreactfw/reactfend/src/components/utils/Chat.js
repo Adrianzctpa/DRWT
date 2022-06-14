@@ -26,9 +26,9 @@ const Chat = ({socket}) => {
             <div id='chat-container' className={`${BGStyles.bg_color_white} ${styles.chat}`}>    
                 <div id='chat' />
             </div>
-            <form onSubmit={handleSubmit} id="form" >
-                <input type="text" name="message"></input>
-                <button class="btn btn-primary" type="submit">SEND</button>
+            <form className={styles.flexer} onSubmit={handleSubmit} id="form" >
+                <input className={styles.input} type="text" name="message"></input>
+                <button className={`btn btn-primary ${styles.button}`} type="submit">SEND</button>
             </form>
         </div>    
     )

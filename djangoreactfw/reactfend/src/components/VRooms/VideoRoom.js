@@ -1,8 +1,7 @@
 import React, {useContext, useEffect, useState} from "react";
-import {useNavigate, Link} from 'react-router-dom'
+import {useNavigate, Link, useParams} from 'react-router-dom'
 import GeneralContext from "../../context/GeneralContext"
 import Player from '../utils/Player.js'
-import CreateVRoom from './CreateVRoom.js'
 import styles from "../../../static/css/VideoRoom.module.css"
 import BGStyles from '../../../static/css/Backgrounds.module.css'
 
@@ -12,11 +11,12 @@ const VideoRoom = () => {
     const [loading, setLoading] = useState(true)
     const [info, setInfo] = useState(null)
     const navigate = useNavigate()
+    const { uuid } = useParams() 
 
     const handleDelete = async () => {
         if (!confirm("Are you sure you want to delete this videoroom?")) return
 
-        let response = await fetch(`/v1/vroomset/${info.uuid}/`, {
+        let response = await fetch(`/v1/vroomset/${uuid}/`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${context.tokens.access}`
@@ -30,49 +30,8 @@ const VideoRoom = () => {
         }
     }
 
-    const handleEdit = () => {
-        let form  = document.getElementById('editform')
-        let btn = document.getElementById('editbtn')
-        
-        if (form.style.display === 'none') {
-            form.style.display = 'flex'
-            btn.textContent = 'Close'
-        } else {
-            form.style.display = 'none'
-            btn.textContent = 'Edit'
-        }
-    }
-
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        
-        let formData = new FormData()
-        formData.append("title", e.target.title.value)
-        formData.append("guest_pause_permission", e.target.pause_perm.checked)
-        if (e.target.vpath.files[0] !== undefined) {   
-            formData.append("videopath", e.target.vpath.files[0])
-        }
-
-        let response = await fetch(`/v1/vroomset/${info.uuid}/`, {
-            method: "PATCH",
-            headers: {
-                "Authorization": `Bearer ${context.tokens.access}`
-            },
-            body: formData
-        })
-        let data = await response.json()
-
-        if (response.status === 200) {
-            window.location.reload(false)
-        } else {
-            alert(data)
-        }
-    }
-
     const RoomCheck = async () => {
-        const uuid = window.location.pathname.slice(10, 48)
-
-        let response = await fetch('/v1/getvrooms' + uuid, {
+        let response = await fetch(`/v1/getvrooms/${uuid}/`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${context.tokens.access}`
@@ -81,6 +40,7 @@ const VideoRoom = () => {
         let data = await response.json()
 
         if (response.status === 200) {
+            console.log(uuid)
             setInfo(data)
             setLoading(false)
         } 
@@ -94,7 +54,7 @@ const VideoRoom = () => {
         <>
             { loading ? <h1>404 - Room not found</h1> : (
                 <div className={`${BGStyles.bg_color_strongred} ${styles.flex}`}> 
-                    <div className={styles.center_stack}>
+                    <div className={`${BGStyles.bg_color_lightblack} ${styles.center_stack}`}>
                         <h1>{info.title}</h1>
                         <h1>Owner: {info.owner}</h1>
                         <h1>Guest Pause: {info.guest_pause_permission.toString()}</h1>
@@ -102,18 +62,20 @@ const VideoRoom = () => {
 
                     <Player pause_perm={info.guest_pause_permission} owner={info.owner} uuid={info.uuid} url={info.videopath}/>
 
-                    <button id="editbtn" onClick={handleEdit}>Edit</button>
+                    <Link to={`/createvroom/${uuid}/`}>
+                        <button className={`${styles.btn} btn btn-primary`}>
+                            Edit
+                        </button>
+                    </Link>
 
                     { info.owner === context.username ? 
-                        <button id="delbtn" onClick={handleDelete}>Delete</button> : (
+                        <button className={`${styles.btn} btn btn-danger`} id="delbtn" onClick={handleDelete}>Delete</button> : (
                             null
                         )
                     }
 
-                    <Link to='/selectvroom/'>Select other Vroom</Link>
- 
-                    <CreateVRoom mode={"edit"} patchSubmit={handleSubmit}/>
-                </div>
+                    <Link to='/selectvroom/'><button className={`${styles.btn} btn btn-secondary`}>Select other vroom</button></Link>
+                 </div>
             )}
         </>
     )

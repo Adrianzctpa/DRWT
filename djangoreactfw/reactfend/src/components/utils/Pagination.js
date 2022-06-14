@@ -3,10 +3,8 @@ import { Link } from 'react-router-dom'
 import GeneralContext from "../../context/GeneralContext"
 import SearchFilter from "./SearchFilter"
 import styles from "../../../static/css/SelectVRoom.module.css"
-import { useNavigate } from 'react-router-dom'
 
 const Pagination = ({rooms}) => {
-    const navigate = useNavigate()
     const {tokens} = useContext(GeneralContext)
     const ROOMS_PER_PAGE = 10
 

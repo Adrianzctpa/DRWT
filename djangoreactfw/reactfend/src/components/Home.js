@@ -13,7 +13,7 @@ const Home = () => {
             <div className={styles.left}>
                 <div className={styles.top}>
                     <h1>Watch videos, with people you care about.</h1>
-                    <img src="../../static/svg/play-button.svg" />         
+                    <img className={styles.img} src="../../static/svg/play-button.svg" />         
                 </div>
             </div>
 

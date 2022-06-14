@@ -44,6 +44,9 @@ const Player = ({url, uuid, owner, pause_perm}) => {
             
             if (filetype === 'video') {          
                 player = <ReactPlayer controls={true} id='video'
+                className={styles.video}
+                height='auto'
+                width='100%'
                 url={URLFile} muted={true}
                 onProgress={owner === username ? (progress) => SyncVideo(progress, VideoSocket) : (
                     undefined
@@ -83,10 +86,12 @@ const Player = ({url, uuid, owner, pause_perm}) => {
                 let chat = document.getElementById('chat')
                 let chatCon = document.getElementById('chat-container')
                 let p = document.createElement('p')
+                let hr = document.createElement('hr')
 
                 p.textContent = `${data.from}: ${data.message}`
 
                 chat.appendChild(p)
+                chat.appendChild(hr)
                 chatCon.scrollTop = chatCon.scrollHeight
             }
 
@@ -132,15 +137,15 @@ const Player = ({url, uuid, owner, pause_perm}) => {
     }, [])
 
     return (
-        <div className={styles.center_row} id="mediawrapper">
+        <div className={styles.center} id="mediawrapper">
             { socketloading ? <p>Loading your media</p> : (
                 <>
                     {mediainfo.type === 'image' ? 
-                        <img src={mediainfo.blob} style={{width: '500px',height: '500px'}} /> 
+                        <img src={mediainfo.blob} className={styles.image} /> 
                         : (
-                        <>
+                        <div className={styles.videowrapper}>
                             {player}
-                        </>
+                        </div>
                     )}
                     <Chat username={username} socket={WSocket}/>
                 </>)
