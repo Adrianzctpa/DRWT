@@ -1,3 +1,56 @@
+.container {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.left {
+    width: 50%;
+    height: 100%;
+    background-color: #C70039;
+}
+
+.right {
+    width: 50%;
+    height: 100%;
+    background-color: #39393E;
+}
+
+.img {
+    height: 50px;
+    width: 50px;
+    margin-top: 20px;
+}
+
+
+.top {
+    max-width: 70%;
+    text-align: center;
+    margin: auto;
+    position: relative;
+    top: 20%;
+}
+
+
+.center {
+    max-width: 70%;
+    text-align: center;
+    margin: auto;
+    position: relative;
+    top: 50%;
+}
+
 .a {
     margin-right: 20px;
+    margin-top: 20px;
+}
+
+.links {
+    width: fit-content;
+    display: flex;
+    flex-flow: column wrap;
+    margin: 0 auto;
 }

@@ -1,13 +1,23 @@
+from django.shortcuts import render
 from rest_framework import generics, viewsets, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser
+from django_filters import rest_framework as filters
 from .serializers import VRoomSerializer, PatcherSerializer
 from ..models import VideoRoom
+
+class VRoomFilter(filters.FilterSet):
+    title = filters.CharFilter(lookup_expr='icontains')
+
+    class Meta: 
+        model = VideoRoom
+        fields = ('title', 'created_at')
 
 class VRoomViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]   
     parser_classes = [MultiPartParser]
+    filterset_class = VRoomFilter
     lookup_field = "uuid"
 
     def get_serializer_class(self):
@@ -32,9 +42,16 @@ class VRoomViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(data=req)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response({'status':status.HTTP_200_OK})
+        return Response({'status':status.HTTP_200_OK, 'resp': serializer.data})
 
-class GetVRoomsView(generics.ListAPIView):
+class GetAllVRoomsViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated]
-    queryset = VideoRoom.objects.all()
     serializer_class = VRoomSerializer
+    filterset_class = VRoomFilter
+    lookup_field = "uuid"
+
+    def get_queryset(self):
+        if self.action == 'retrieve':
+            return VideoRoom.objects.filter(uuid=self.kwargs.get("uuid"))
+        return VideoRoom.objects.all()
+

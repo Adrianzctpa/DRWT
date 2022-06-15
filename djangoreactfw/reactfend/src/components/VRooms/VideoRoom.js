@@ -1,75 +1,82 @@
-import React from "react";
-import Player from './Player.js'
+import React, {useContext, useEffect, useState} from "react";
+import {useNavigate, Link, useParams} from 'react-router-dom'
+import GeneralContext from "../../context/GeneralContext"
+import Player from '../utils/Player.js'
 import styles from "../../../static/css/VideoRoom.module.css"
+import BGStyles from '../../../static/css/Backgrounds.module.css'
 
-const VideoRoom = ({info, ac}) => {
+const VideoRoom = () => {
 
-    const handleEdit = () => {
-        if (document.querySelector('form').style.display === '') {
-            document.querySelector('form').style.display = 'flex'
-            document.querySelector("button").textContent = 'Close'
-        } else {
-            document.querySelector('form').style.display = ''
-            document.querySelector("button").textContent = 'Edit'
+    const context = useContext(GeneralContext)
+    const [loading, setLoading] = useState(true)
+    const [info, setInfo] = useState(null)
+    const navigate = useNavigate()
+    const { uuid } = useParams() 
+
+    const handleDelete = async () => {
+        if (!confirm("Are you sure you want to delete this videoroom?")) return
+
+        let response = await fetch(`/v1/vroomset/${uuid}/`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${context.tokens.access}`
+            }
+        })
+        let data = await response
+
+        if (response.status === 204) {
+            navigate('/selectvroom/')
+            window.location.reload(false)
         }
     }
 
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        
-        let formData = new FormData()
-        formData.append("title", e.target.title.value)
-        formData.append("guest_pause_permission", e.target.pause_perm.checked)
-        if (e.target.vpath.files[0] !== undefined) {   
-            formData.append("videopath", e.target.vpath.files[0])
-        }
-
-        let response = await fetch(`/v1/vroomset/${info.uuid}/`, {
-            method: "PATCH",
+    const RoomCheck = async () => {
+        let response = await fetch(`/v1/getvrooms/${uuid}/`, {
+            method: "GET",
             headers: {
-                "Authorization": `Bearer ${ac}`
-            },
-            body: formData
+                "Authorization": `Bearer ${context.tokens.access}`
+            }
         })
         let data = await response.json()
 
         if (response.status === 200) {
-            console.log("Edited!")
-            window.location.reload(false)
-        } else {
-            alert(data)
-        }
+            console.log(uuid)
+            setInfo(data)
+            setLoading(false)
+        } 
     }
+
+    useEffect(() => {
+        RoomCheck()
+    }, [])
 
     return (
         <>
-            {
-                info === undefined ? 
-                <h1>PROHIBITED ACCESS</h1> : (
-                <div> 
-                    <p>Title: {info.title}</p>
-                    <h1>Owner: {info.owner}</h1>
-                    <h1>Guest Pause: {info.guest_pause_permission.toString()}</h1>
-                    <Player url={info.videopath}/>
+            { loading ? <h1>404 - Room not found</h1> : (
+                <div className={`${BGStyles.bg_color_strongred} ${styles.flex}`}> 
+                    <div className={`${BGStyles.bg_color_lightblack} ${styles.center_stack}`}>
+                        <h1>{info.title}</h1>
+                        <h1>Owner: {info.owner}</h1>
+                        <h1>Guest Pause: {info.guest_pause_permission.toString()}</h1>
+                    </div>
 
-                    <button onClick={handleEdit}>Edit</button>
+                    <Player pause_perm={info.guest_pause_permission} owner={info.owner} uuid={info.uuid} url={info.videopath}/>
 
-                    <form onSubmit={handleSubmit} className={styles.form}> 
-                        <label>Title:</label>
-                        <input type="text" name="title" />
+                    <Link to={`/createvroom/${uuid}/`}>
+                        <button className={`${styles.btn} btn btn-primary`}>
+                            Edit
+                        </button>
+                    </Link>
 
-                        <label>Can guest pause video?</label>
-                        <input type="checkbox" name="pause_perm" />
+                    { info.owner === context.username ? 
+                        <button className={`${styles.btn} btn btn-danger`} id="delbtn" onClick={handleDelete}>Delete</button> : (
+                            null
+                        )
+                    }
 
-                        <label>Select a video to share:</label>
-                        <input id="file"  type="file" name="vpath" 
-                        accept="image/png, image/jpeg, image/jpg,
-                        image/webp, video/mp4, video/x-m4v" />
-
-                        <button type="submit">Edit</button>
-                    </form>
-                </div>)  
-            }
+                    <Link to='/selectvroom/'><button className={`${styles.btn} btn btn-secondary`}>Select other vroom</button></Link>
+                 </div>
+            )}
         </>
     )
 }

@@ -1,64 +1,41 @@
-import React from "react";
-import { Link, useNavigate } from "react-router-dom"
+import React, {useContext} from "react";
+import formStyles from '../../static/css/Form.module.css' 
+import styles from '../../static/css/Backgrounds.module.css' 
+import GeneralContext from "../context/GeneralContext"
+import { Link } from "react-router-dom"
 
-const Login = ({log}) => {
-    const navigate = useNavigate();
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        let response = await fetch("/v1/token/", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                username: e.target.username.value,
-                password: e.target.password.value
-            })
-        })
-        
-        let data = await response.json()
-        if (response.status === 200) {
-            localStorage.setItem('access', data.access)
-            localStorage.setItem('refresh', data.refresh)
-            console.log("made tokens!")
-            navigate("/")
-            window.location.reload(false)
-        } else {
-            alert("No account found with given credentials")
-        }       
-    }
-
-    const LogOut = () => {
-        localStorage.removeItem("access")
-        localStorage.removeItem("refresh")
-        console.log("removed.")
-        window.location.reload(false)
-    }
+const Login = () => {
+    const {logstatus, login, logout} = useContext(GeneralContext)
 
     return (
-        <div>
-            { log ?
-                <>
-                    <h1>Logout</h1>
-                    <button onClick={LogOut}>Logout</button>
-                    <Link to="/">GO BACK</Link>
-                </> : (
-                <>
+        <div className={styles.bg_color_strongred}>
+            { !logstatus ?
+                <div className={`${formStyles.form} ${styles.bg_color_lightblack}`}>
                     <h1>Login</h1>
-                    <form onSubmit={handleSubmit}>
-                        <label>username</label>
-                        <input type="username" name="username" />
+                    <form onSubmit={login}>
 
-                        <label>password</label>
-                        <input type="password" name="password" />
+                        <div class="mb-3">
+                            <label class="form-label">Username</label>
+                            <input type="username" class="form-control" id="username" />
+                        </div>
 
-                        <button type="submit">Login</button>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" />
+                            <div id="passHelp" class="form-text">Don't worry, we'll never share your password.</div>
+                        </div>
+
+                        <button type="submit" class='btn btn-primary'>Login</button>
                     </form>
                     <Link to='/register'>Don't have an account?</Link>
                     <Link to="/">GO BACK</Link>
-                </>) 
+                </div> : (
+                <div className={`${formStyles.form} ${styles.bg_color_lightblack}`}>
+                    <h1>Logout</h1>
+                    <button class='btn btn-danger' style={{width: 'fit-content', padding: '10px'}} onClick={logout}>Logout</button>
+                    <Link to="/">GO BACK</Link>
+                </div>
+                )
             }
         </div>  
     )
