@@ -117,6 +117,8 @@ const Player = ({url, uuid, owner, pause_perm}) => {
             
             if (data.type === 'sync') {
 
+                if (video.paused) return
+
                 const current = Math.round(video.currentTime)
 
                 if (Math.round(data.time) !== current) {
