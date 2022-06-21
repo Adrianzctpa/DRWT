@@ -62,14 +62,16 @@ const VideoRoom = () => {
 
                     <Player pause_perm={info.guest_pause_permission} owner={info.owner} uuid={info.uuid} url={info.videopath}/>
 
-                    <Link to={`/createvroom/${uuid}/`}>
-                        <button className={`${styles.btn} btn btn-primary`}>
-                            Edit
-                        </button>
-                    </Link>
-
                     { info.owner === context.username ? 
-                        <button className={`${styles.btn} btn btn-danger`} id="delbtn" onClick={handleDelete}>Delete</button> : (
+                        <>
+                            <Link to={`/createvroom/${uuid}/`}>
+                                <button className={`${styles.btn} btn btn-primary`}>
+                                    Edit
+                                </button>
+                            </Link>
+                            <button className={`${styles.btn} btn btn-danger`} id="delbtn" onClick={handleDelete}>Delete</button> 
+                        </>
+                        : (
                             null
                         )
                     }
