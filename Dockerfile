@@ -1,13 +1,13 @@
-FROM ubuntu:20.04 
+FROM python:3.10.5-alpine3.16
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-RUN ln -snf /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime && echo America/Sao_Paulo > /etc/timezone
+RUN apk update && apk add build-base libffi-dev
 
-RUN apt-get update && apt-get install -y python3 python3-pip npm
+RUN apk add --update npm
 
 COPY ./djangoreactfw/requirements.txt .
 
@@ -16,8 +16,6 @@ COPY ./djangoreactfw/reactfend/package*.json ./
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 RUN npm install
-
-RUN useradd --create-home django
 
 COPY . .
 
