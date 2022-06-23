@@ -187,7 +187,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379',
+        'LOCATION': 'redis://provisoryname_redis_1:6379',
     }
 }
 
@@ -196,5 +196,8 @@ ASGI_APPLICATION = "djangoreactfw.asgi.application"
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('provisoryname_redis_1', 6379)],
+        },
     },
 }

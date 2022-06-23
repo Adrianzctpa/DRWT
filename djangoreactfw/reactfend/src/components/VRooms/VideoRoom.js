@@ -40,7 +40,6 @@ const VideoRoom = () => {
         let data = await response.json()
 
         if (response.status === 200) {
-            console.log(uuid)
             setInfo(data)
             setLoading(false)
         } 
