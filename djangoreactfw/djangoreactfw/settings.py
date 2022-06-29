@@ -196,8 +196,9 @@ ASGI_APPLICATION = "djangoreactfw.asgi.application"
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [('provisoryname_redis_1', 6379)],
-        },
+        # comment this out if you want to run it normally without docker
+        # 'CONFIG': {
+        #     "hosts": [('provisoryname_redis_1', 6379)],
+        # },
     },
 }

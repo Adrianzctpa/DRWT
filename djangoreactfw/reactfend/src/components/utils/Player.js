@@ -1,17 +1,30 @@
-import React, {useEffect, useState, useContext} from 'react';
+import React, {useEffect, useLayoutEffect, useState, useContext} from 'react';
 import ReactPlayer from 'react-player';
 import GeneralContext from '../../context/GeneralContext';
 import Chat from './Chat'
 import styles from '../../../static/css/VideoRoom.module.css'
 
-var player;
-const Player = ({url, uuid, owner, pause_perm}) => {
+const Player = ({url, uuid, owner, pause_perm, setUsers}) => {
     
     const {username, tokens} = useContext(GeneralContext)
-    const [users, setUsers] = useState('')
     const [WSocket, setWSocket] = useState('')
     const [mediainfo, setMediaInfo] = useState('')
     const [socketloading, setSocketLoading] = useState(true)
+
+    let player, socket;
+
+    const manageChat = (txt) => {
+        let chat = document.getElementById('chat')
+        let chatCon = document.getElementById('chat-container')
+        let hr = document.createElement('hr')
+        let p = document.createElement('p')
+
+        p.textContent = txt
+
+        chat.appendChild(p)
+        chat.appendChild(hr)
+        chatCon.scrollTop = chatCon.scrollHeight
+    }
 
     const SyncVideo = (progress, socket) => {
         const seconds = progress.playedSeconds
@@ -40,7 +53,7 @@ const Player = ({url, uuid, owner, pause_perm}) => {
             setMediaInfo({type: filetype, blob: URLFile})
 
             const SocketUrl = `ws://${window.location.host}/ws/video/${uuid}`
-            const VideoSocket = new WebSocket(SocketUrl)
+            socket = new WebSocket(SocketUrl)
             
             if (filetype === 'video') {          
                 player = <ReactPlayer controls={true} id='video'
@@ -59,7 +72,7 @@ const Player = ({url, uuid, owner, pause_perm}) => {
                 )}
                 />
             } 
-            VideoSignal(VideoSocket)
+            VideoSignal(socket)
         })
     }
 
@@ -75,7 +88,7 @@ const Player = ({url, uuid, owner, pause_perm}) => {
         }
 
         socket.onclose = () => {
-            console.log('disconnected (video)')
+            setUsers('')
         }
 
         socket.onmessage = (e) => {
@@ -83,26 +96,35 @@ const Player = ({url, uuid, owner, pause_perm}) => {
             const video = document.getElementsByTagName('video')[0] === undefined ? null : document.getElementsByTagName('video')[0]
 
             if (data.type === 'chat') {
-                let chat = document.getElementById('chat')
-                let chatCon = document.getElementById('chat-container')
-                let p = document.createElement('p')
-                let hr = document.createElement('hr')
-
-                p.textContent = `${data.from}: ${data.message}`
-
-                chat.appendChild(p)
-                chat.appendChild(hr)
-                chatCon.scrollTop = chatCon.scrollHeight
+                manageChat(`${data.from}: ${data.message}`)
             }
 
             if (data.type === 'join') {
-                console.log(`${data.from} just joined!`)
-                setUsers(data.users)
+                manageChat(`${data.from} acabou de entrar!`)
+
+                let userArr = [];
+
+                for (var i = 0; i < data.users.length; i++) {
+                    if (data.users[i].uuid === uuid) {
+                        userArr.push(<h1 key={data.users[i].username}>{data.users[i].username}</h1>)
+                    }
+                }
+
+                setUsers(userArr)
             }
 
             if (data.type === 'disconnect') {
-                console.log(`${data.from} saiu do grupo!`)
-                setUsers(data.users)
+                manageChat(`${data.from} saiu do grupo!`)
+                
+                let userArr = [];
+
+                for (var i = 0; i < data.users.length; i++) {
+                    if (data.users[i].uuid === uuid) {
+                        userArr.push(<h1 key={data.users[i].username}>{data.users[i].username}</h1>)
+                    }
+                }
+
+                setUsers(userArr)
             }
 
             if (data.type === 'state') {
@@ -138,7 +160,14 @@ const Player = ({url, uuid, owner, pause_perm}) => {
         }    
     }, [])
 
+    useLayoutEffect(() => {
+        return () => {
+            socket.close()
+        }
+    }, [])
+
     return (
+
         <div className={styles.center} id="mediawrapper">
             { socketloading ? <p>Loading your media</p> : (
                 <>

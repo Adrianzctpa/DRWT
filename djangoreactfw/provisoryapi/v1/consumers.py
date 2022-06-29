@@ -60,7 +60,8 @@ class VRoomConsumer(AsyncWebsocketConsumer):
             
             self.users.append({
                 'username': self.username,
-                'uid': self.user_id
+                'uid': self.user_id,
+                'uuid': self.room_group_name
             })
 
             data['userlist'] = self.users

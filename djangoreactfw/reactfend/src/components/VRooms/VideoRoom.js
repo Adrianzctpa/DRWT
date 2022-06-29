@@ -9,6 +9,7 @@ const VideoRoom = () => {
 
     const context = useContext(GeneralContext)
     const [loading, setLoading] = useState(true)
+    const [users, setUsers] = useState('')
     const [info, setInfo] = useState(null)
     const navigate = useNavigate()
     const { uuid } = useParams() 
@@ -57,10 +58,12 @@ const VideoRoom = () => {
                         <h1>{info.title}</h1>
                         <h1>Owner: {info.owner}</h1>
                         <h1>Guest Pause: {info.guest_pause_permission.toString()}</h1>
+                        <h1>Users connected:</h1>
+                        <h1>{users}</h1>
                     </div>
 
-                    <Player pause_perm={info.guest_pause_permission} owner={info.owner} uuid={info.uuid} url={info.videopath}/>
-
+                    <Player pause_perm={info.guest_pause_permission} owner={info.owner} uuid={info.uuid} url={info.videopath} setUsers={setUsers}/>
+                
                     { info.owner === context.username ? 
                         <>
                             <Link to={`/createvroom/${uuid}/`}>
