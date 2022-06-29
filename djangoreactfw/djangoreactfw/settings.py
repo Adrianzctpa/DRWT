@@ -197,8 +197,8 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         # comment this out if you want to run it normally without docker
-        # 'CONFIG': {
-        #     "hosts": [('provisoryname_redis_1', 6379)],
-        # },
+        'CONFIG': {
+            "hosts": [('provisoryname_redis_1', 6379)],
+        },
     },
 }

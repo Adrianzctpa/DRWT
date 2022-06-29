@@ -17,6 +17,8 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 
 RUN npm install
 
+RUN python3 ./djangoreactfw/manage.py migrate
+
 COPY . .
 
 CMD [ "python3" ]
