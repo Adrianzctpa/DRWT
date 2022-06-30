@@ -15,7 +15,6 @@ export const GeneralProvider = ({children}) => {
     const [uservrooms, setUserVrooms] = useState([])
     const [uid, setUid] = useState(null)
     const [loading, setLoading] = useState(true)
-    const [prop, setProp] = useState('')
 
     const navigate = useNavigate()
 
@@ -173,7 +172,7 @@ export const GeneralProvider = ({children}) => {
         login: LogIn,
         logout: LogOut,
         register: RegisterUser,
-        refreshContent: getUsername,
+        refreshContent: getUsername
     } 
 
     useEffect(() => {

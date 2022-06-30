@@ -8,5 +8,4 @@ def indexSPA(request, *args, **kwargs):
     context = {
         'uuid': kwargs.get('uuid')
     }
-    print(context)
     return TemplateResponse(request, 'index.html', context)

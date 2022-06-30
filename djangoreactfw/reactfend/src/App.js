@@ -11,7 +11,7 @@ import VideoRoom from "./components/VRooms/VideoRoom.js"
 
 const App = () => {
  
-  const {logstatus, loading, vrooms, uvrooms} = useContext(GeneralContext)
+  const {logstatus, loading} = useContext(GeneralContext)
 
   return (
     <>

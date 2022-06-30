@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-75z)-o&jb!*ob0si2qm-)usmsqe^jy9pqj@*jilrp!k-8#&9kg
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
@@ -87,8 +87,12 @@ WSGI_APPLICATION = 'djangoreactfw.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('POSTGRES_DB', 'postgresdb'),
+        'USER': os.environ.get('POSTGRES_USER', 'root'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', '0000'),
+        'HOST': os.environ.get('DB_HOST', 'postgresdb'),
+        'PORT': '5432',
     }
 }
 
@@ -104,6 +108,7 @@ USE_I18N = True
 USE_TZ = True
 
 LOGIN_URL = 'login'
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
@@ -187,7 +192,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379',
+        'LOCATION': 'redis://provisoryname_redis_1:6379',
     }
 }
 
@@ -196,5 +201,8 @@ ASGI_APPLICATION = "djangoreactfw.asgi.application"
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('provisoryname_redis_1', 6379)],
+        },
     },
 }

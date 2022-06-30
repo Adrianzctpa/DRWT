@@ -81,7 +81,7 @@ const Pagination = ({rooms}) => {
             
             return pageNumbers.map(number => (
                 <li key={number}>
-                    <button onClick={handleClick}>
+                    <button class='btn btn-secondary' onClick={handleClick}>
                         {number}
                     </button>
                 </li>
