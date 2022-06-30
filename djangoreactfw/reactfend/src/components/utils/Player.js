@@ -7,11 +7,12 @@ import styles from '../../../static/css/VideoRoom.module.css'
 const Player = ({url, uuid, owner, pause_perm, setUsers}) => {
     
     const {username, tokens} = useContext(GeneralContext)
+    const [vPlayer, setVPlayer] = useState('')
     const [WSocket, setWSocket] = useState('')
     const [mediainfo, setMediaInfo] = useState('')
     const [socketloading, setSocketLoading] = useState(true)
 
-    let player, socket;
+    let socket;
 
     const manageChat = (txt) => {
         let chat = document.getElementById('chat')
@@ -56,21 +57,21 @@ const Player = ({url, uuid, owner, pause_perm, setUsers}) => {
             socket = new WebSocket(SocketUrl)
             
             if (filetype === 'video') {          
-                player = <ReactPlayer controls={true} id='video'
+                setVPlayer(<ReactPlayer controls={true} id='video'
                 className={styles.video}
                 height='auto'
                 width='100%'
                 url={URLFile} muted={true}
-                onProgress={owner === username ? (progress) => SyncVideo(progress, VideoSocket) : (
+                onProgress={owner === username ? (progress) => SyncVideo(progress, socket) : (
                     undefined
                 )}
-                onPause={owner === username || pause_perm ? () => VideoState(VideoSocket, true) : (
+                onPause={owner === username || pause_perm ? () => VideoState(socket, true) : (
                     undefined
                 )}
-                onPlay={owner === username || pause_perm ? () => VideoState(VideoSocket, false) : (
+                onPlay={owner === username || pause_perm ? () => VideoState(socket, false) : (
                     undefined
                 )}
-                />
+                />)
             } 
             VideoSignal(socket)
         })
@@ -175,7 +176,7 @@ const Player = ({url, uuid, owner, pause_perm, setUsers}) => {
                         <img src={mediainfo.blob} className={styles.image} /> 
                         : (
                         <div className={styles.videowrapper}>
-                            {player}
+                            {vPlayer}
                         </div>
                     )}
                     <Chat username={username} socket={WSocket}/>
