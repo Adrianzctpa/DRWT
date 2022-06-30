@@ -3,7 +3,10 @@ version: "3.9"
 services:
   web:
     build: .
-    command: sh -c "cd djangoreactfw/reactfend && npm run dev & python3 djangoreactfw/manage.py runserver 0.0.0.0:8000"
+    command: sh -c "cd djangoreactfw/reactfend && npm run dev & 
+                    python3 djangoreactfw/manage.py makemigrations &&
+                    python3 djangoreactfw/manage.py migrate &&
+                    python3 djangoreactfw/manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/app/
     ports:

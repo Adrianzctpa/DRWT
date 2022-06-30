@@ -85,13 +85,6 @@ WSGI_APPLICATION = 'djangoreactfw.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -115,6 +108,7 @@ USE_I18N = True
 USE_TZ = True
 
 LOGIN_URL = 'login'
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
@@ -207,7 +201,6 @@ ASGI_APPLICATION = "djangoreactfw.asgi.application"
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        # comment this out if you want to run it normally without docker
         'CONFIG': {
             "hosts": [('provisoryname_redis_1', 6379)],
         },

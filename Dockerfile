@@ -19,8 +19,4 @@ RUN npm install
 
 COPY . .
 
-# RUN python3 djangoreactfw/manage.py makemigrations && python3 djangoreactfw/manage.py migrate
-
-RUN ls
-
 CMD [ "python3" ]
