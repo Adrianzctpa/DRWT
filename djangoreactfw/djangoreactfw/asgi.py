@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.0/howto/deployment/asgi/
 
 import os
 
-import provisoryapi.v1.routing
+import api.v1.routing
 from channels.auth import AuthMiddlewareStack
 from channels.routing import ProtocolTypeRouter, URLRouter
 from django.core.asgi import get_asgi_application
@@ -20,7 +20,7 @@ application = ProtocolTypeRouter({
     'http': get_asgi_application(),
     'websocket': AuthMiddlewareStack(
             URLRouter(
-                provisoryapi.v1.routing.websocket_urlpatterns
+                api.v1.routing.websocket_urlpatterns
             )
         )
 })

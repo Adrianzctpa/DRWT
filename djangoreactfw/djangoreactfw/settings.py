@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
     'django_filters',
-    'provisoryapi.apps.ProvisoryapiConfig',  
+    'api.apps.ApiConfig',  
     'reactfend.apps.ReactfendConfig',
     'users.apps.UsersConfig',
     'django_cleanup.apps.CleanupConfig',
@@ -192,7 +192,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': 'redis://provisoryname_redis_1:6379',
+        'LOCATION': 'redis://DRFW_redis_1:6379',
     }
 }
 
@@ -202,7 +202,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('provisoryname_redis_1', 6379)],
+            "hosts": [('DRFW_redis_1', 6379)],
         },
     },
 }

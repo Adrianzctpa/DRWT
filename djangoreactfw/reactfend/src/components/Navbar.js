@@ -7,7 +7,7 @@ const Navbar = ({log}) => {
     return (
         <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
             <div class='container-fluid'>
-                <Link class="navbar-brand" to='/'>Provisory Name</Link>
+                <Link class="navbar-brand" to='/'>DRWT</Link>
                 
                 {log ? 
                     <>                       
