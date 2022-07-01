@@ -1,4 +1,4 @@
-# DRWT
+# DRWT - Django React Watch Together
 
 An Video Player made with Django and React! Sync with your friends and watch together every video from your PC!
 
