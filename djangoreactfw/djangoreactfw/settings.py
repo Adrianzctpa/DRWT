@@ -192,7 +192,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': 'redis://DRFW_redis_1:6379',
+        'LOCATION': 'redis://DRWT_redis_1:6379',
     }
 }
 
@@ -202,7 +202,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('DRFW_redis_1', 6379)],
+            "hosts": [('DRWT_redis_1', 6379)],
         },
     },
 }
